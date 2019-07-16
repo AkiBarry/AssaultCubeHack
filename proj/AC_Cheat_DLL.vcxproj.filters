@@ -1,0 +1,181 @@
+﻿<?xml version="1.0" encoding="utf-8"?>
+<Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
+  <ItemGroup>
+    <Filter Include="Files">
+      <UniqueIdentifier>{93995380-89BD-4b04-88EB-625FBE52EBFB}</UniqueIdentifier>
+      <Extensions>h;hh;hpp;hxx;hm;inl;inc;xsd</Extensions>
+    </Filter>
+    <Filter Include="Files\Main">
+      <UniqueIdentifier>{2d85d141-7595-4c93-a3cb-e84f24cb21d4}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Math">
+      <UniqueIdentifier>{5df9e514-6f78-49ff-a32b-c7aa9d517672}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Math\Matrix">
+      <UniqueIdentifier>{f1947f4a-77e2-4e7d-823e-4c0c6bd9f641}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Math\Vector">
+      <UniqueIdentifier>{8b98dc9f-f2c3-4c50-8988-46b6ee48d0c0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Cheat">
+      <UniqueIdentifier>{409bbaa8-f578-4203-b2b1-1542732a772f}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Cheat\Hook">
+      <UniqueIdentifier>{1b9e6ba0-99c9-4c71-baf9-bcd1ef80c66a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Util">
+      <UniqueIdentifier>{41ea286e-8fe9-4a25-bc43-f2e0ebd29800}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Util\Canvas">
+      <UniqueIdentifier>{5211e482-7b85-4232-a096-ccf11bf22c0a}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Util\Colour">
+      <UniqueIdentifier>{541c22b3-cd47-472f-8d67-66f491cedc9e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Util\Memory">
+      <UniqueIdentifier>{94078ac2-54f9-46f1-83c9-330852818ccc}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Globals">
+      <UniqueIdentifier>{119550bf-8288-4621-ac31-8f50866960d1}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\UI">
+      <UniqueIdentifier>{b8ecb799-5f90-4b7a-971e-1ff75a4b7bf7}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\UI\Menu">
+      <UniqueIdentifier>{bc3f6348-0cfd-4b71-a4c2-f119363c42b6}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Cheat\Signature">
+      <UniqueIdentifier>{2fd9ea49-057a-43be-b123-31c6d50b7077}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Cheat\SDK">
+      <UniqueIdentifier>{3f35271a-8370-4b6e-85db-f9b712aef410}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Util\Types">
+      <UniqueIdentifier>{75ed93ed-db0b-417c-b783-ba75241ea47e}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Util\Logging">
+      <UniqueIdentifier>{21deaf63-7283-4cd4-8612-91e5cdc26e28}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Input">
+      <UniqueIdentifier>{14af14f1-e9ec-4f42-97e5-f1a6e7a145a0}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Util\Logging\Console">
+      <UniqueIdentifier>{e0121d4b-ef0a-4f38-a57e-db90bf0ce0fe}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Util\Misc">
+      <UniqueIdentifier>{d6fd0c89-12f8-4fce-bbc7-48d229311697}</UniqueIdentifier>
+    </Filter>
+    <Filter Include="Files\Util\Variable">
+      <UniqueIdentifier>{fa75d4a6-54ac-45af-acfa-601bc99ffbac}</UniqueIdentifier>
+    </Filter>
+  </ItemGroup>
+  <ItemGroup>
+    <ClCompile Include="..\src\Main.cpp">
+      <Filter>Files\Main</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Math.cpp">
+      <Filter>Files\Math</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Cheat.cpp">
+      <Filter>Files\Cheat</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Canvas.cpp">
+      <Filter>Files\Util\Canvas</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Colour.cpp">
+      <Filter>Files\Util\Colour</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Console.cpp">
+      <Filter>Files\Util\Logging\Console</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Memory.cpp">
+      <Filter>Files\Util\Memory</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Globals.cpp">
+      <Filter>Files\Globals</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Signatures.cpp">
+      <Filter>Files\Cheat\Signature</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\SDK.cpp">
+      <Filter>Files\Cheat\SDK</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Menu.cpp">
+      <Filter>Files\UI\Menu</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Logging.cpp">
+      <Filter>Files\Util\Logging</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Input.cpp">
+      <Filter>Files\Input</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Hook.cpp">
+      <Filter>Files\Cheat\Hook</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Misc.cpp">
+      <Filter>Files\Util\Misc</Filter>
+    </ClCompile>
+    <ClCompile Include="..\src\Variable.cpp">
+      <Filter>Files\Util\Variable</Filter>
+    </ClCompile>
+  </ItemGroup>
+  <ItemGroup>
+    <ClInclude Include="..\src\Math.hpp">
+      <Filter>Files\Math</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Matrix.hpp">
+      <Filter>Files\Math\Matrix</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Vector.hpp">
+      <Filter>Files\Math\Vector</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Cheat.hpp">
+      <Filter>Files\Cheat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Canvas.hpp">
+      <Filter>Files\Util\Canvas</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Colour.hpp">
+      <Filter>Files\Util\Colour</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Console.hpp">
+      <Filter>Files\Util\Logging\Console</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Memory.hpp">
+      <Filter>Files\Util\Memory</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Globals.hpp">
+      <Filter>Files\Globals</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Signatures.hpp">
+      <Filter>Files\Cheat\Signature</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\SDK.hpp">
+      <Filter>Files\Cheat\SDK</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Menu.hpp">
+      <Filter>Files\UI\Menu</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Types.hpp">
+      <Filter>Files\Util\Types</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Logging.hpp">
+      <Filter>Files\Util\Logging</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Input.hpp">
+      <Filter>Files\Input</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Hooker.hpp">
+      <Filter>Files\Cheat</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Hook.hpp">
+      <Filter>Files\Cheat\Hook</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Misc.hpp">
+      <Filter>Files\Util\Misc</Filter>
+    </ClInclude>
+    <ClInclude Include="..\src\Variable.hpp">
+      <Filter>Files\Util\Variable</Filter>
+    </ClInclude>
+  </ItemGroup>
+</Project>

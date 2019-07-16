@@ -1,0 +1,31 @@
+﻿
+Microsoft Visual Studio Solution File, Format Version 12.00
+# Visual Studio 15
+VisualStudioVersion = 15.0.27130.2010
+MinimumVisualStudioVersion = 10.0.40219.1
+Project("{8BC9CEB8-8B4A-11D0-8D11-00A0C91BC942}") = "AC_Cheat_DLL", "AC_Cheat_DLL.vcxproj", "{3350BE12-B108-4A94-9B6E-1467F21DC977}"
+EndProject
+Global
+	GlobalSection(SolutionConfigurationPlatforms) = preSolution
+		Debug|x64 = Debug|x64
+		Debug|x86 = Debug|x86
+		Release|x64 = Release|x64
+		Release|x86 = Release|x86
+	EndGlobalSection
+	GlobalSection(ProjectConfigurationPlatforms) = postSolution
+		{3350BE12-B108-4A94-9B6E-1467F21DC977}.Debug|x64.ActiveCfg = Debug|x64
+		{3350BE12-B108-4A94-9B6E-1467F21DC977}.Debug|x64.Build.0 = Debug|x64
+		{3350BE12-B108-4A94-9B6E-1467F21DC977}.Debug|x86.ActiveCfg = Debug|Win32
+		{3350BE12-B108-4A94-9B6E-1467F21DC977}.Debug|x86.Build.0 = Debug|Win32
+		{3350BE12-B108-4A94-9B6E-1467F21DC977}.Release|x64.ActiveCfg = Release|x64
+		{3350BE12-B108-4A94-9B6E-1467F21DC977}.Release|x64.Build.0 = Release|x64
+		{3350BE12-B108-4A94-9B6E-1467F21DC977}.Release|x86.ActiveCfg = Release|Win32
+		{3350BE12-B108-4A94-9B6E-1467F21DC977}.Release|x86.Build.0 = Release|Win32
+	EndGlobalSection
+	GlobalSection(SolutionProperties) = preSolution
+		HideSolutionNode = FALSE
+	EndGlobalSection
+	GlobalSection(ExtensibilityGlobals) = postSolution
+		SolutionGuid = {262F6866-0BD6-442C-BF9E-1C6DF33FD86E}
+	EndGlobalSection
+EndGlobal
