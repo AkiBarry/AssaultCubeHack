@@ -50,7 +50,6 @@ bool Initiate()
 	return NConsole::Initiate()
 		&& NHook::Initiate()
 		//&& NLog::Initiate()
-		&& NCheat::Initiate()
 		&& NSignatures::Initiate()
 		&& NCanvas::Initiate()
 		&& NInput::Initiate(FindWindowA(nullptr, "AssaultCube"));

@@ -2,8 +2,7 @@
 
 #define GLEW_STATIC
 
-#include "Colour.hpp"
-#include "Vector.hpp"
+#include "UU.hpp"
 #include <GL/glew.h>
 #include <iostream>
 #include <string>
@@ -34,23 +33,23 @@ namespace NCanvas
 	{
 		//2D
 
-		void Rect(NMath::CVec2f position, NMath::CVec2f size, CColour colour);
-		void OutlinedRect(NMath::CVec2f position, NMath::CVec2f size, CColour colour);
-		void Circle(NMath::CVec2f position, float radius, CColour colour);
-		void OutlinedCircle(NMath::CVec2f position, float radius, CColour colour);
-		void Poly(size_t num_points, NMath::CVec2f *  positions, CColour colour);
-		void OutlinedPoly(size_t num_points, NMath::CVec2f *  positions, CColour colour);
-		void Line(NMath::CVec2f position1, NMath::CVec2f position2, CColour colour);
-		void OutlinedLine(NMath::CVec2f position1, NMath::CVec2f position2, CColour colour);
-		void Text(std::string text, NMath::CVec2f position, float size, CColour colour);
+		void Rect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour);
+		void OutlinedRect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour);
+		void Circle(UU::CVec2f position, float radius, UU::CColour colour);
+		void OutlinedCircle(UU::CVec2f position, float radius, UU::CColour colour);
+		void Poly(size_t num_points, UU::CVec2f *  positions, UU::CColour colour);
+		void OutlinedPoly(size_t num_points, UU::CVec2f *  positions, UU::CColour colour);
+		void Line(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour);
+		void OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour);
+		void Text(std::string text, UU::CVec2f position, float size, UU::CColour colour);
 
 		// 3D
 
-		void Cuboid(NMath::CVec3f position, NMath::CVec3f size, CColour colour);
-		void OutlinedCuboid(NMath::CVec3f position, NMath::CVec3f size, CColour colour);
+		void Cuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour colour);
+		void OutlinedCuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour colour);
 		
-		void Line(NMath::CVec3f position1, NMath::CVec3f position2, CColour colour);
-		void OutlinedLine(NMath::CVec3f position1, NMath::CVec3f position2, CColour colour);
+		void Line(UU::CVec3f position1, UU::CVec3f position2, UU::CColour colour);
+		void OutlinedLine(UU::CVec3f position1, UU::CVec3f position2, UU::CColour colour);
 	}
 
 	namespace NText
@@ -60,12 +59,12 @@ namespace NCanvas
 		public:
 			CCharacter() = default;
 
-			CCharacter(uint32_t _texture_id, NMath::CVec2f _size, NMath::CVec2f _bearing, float _advance) 
+			CCharacter(uint32_t _texture_id, UU::CVec2f _size, UU::CVec2f _bearing, float _advance) 
 				: texture_id(_texture_id), size(_size), bearing(_bearing), advance(_advance) {}
 
 			uint32_t					texture_id = 0;  // ID handle of the glyph texture
-			NMath::CVec2f	size = NMath::CVec2f(0.f, 0.f);			// Size of glyph
-			NMath::CVec2f	bearing = NMath::CVec2f(0.f, 0.f);		// Offset from baseline to left/top of glyph
+			UU::CVec2f	size = UU::CVec2f(0.f, 0.f);			// Size of glyph
+			UU::CVec2f	bearing = UU::CVec2f(0.f, 0.f);		// Offset from baseline to left/top of glyph
 			float						advance = 0;    // Offset to advance to next glyph
 		};
 

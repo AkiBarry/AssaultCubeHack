@@ -1,6 +1,6 @@
 #pragma once
 #include <cstdint>
-#include "Vector.hpp"
+#include "UU.hpp"
 #include <windows.h>
 #include <functional>
 
@@ -20,7 +20,7 @@ namespace NInput
 	void UnlockMouse();
 	bool ToggleMouseLock();
 
-	NMath::CVec2f GetMousePos();
+	UU::CVec2f GetMousePos();
 
 	bool IsKeyDown(int32_t key);
 

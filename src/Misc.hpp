@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector.hpp"
+#include "UU.hpp"
 
 namespace NMisc
 {
@@ -10,5 +10,5 @@ namespace NMisc
 		BEHIND
 	};
 	
-	W2S_RESULT WorldToScreen(NMath::CVec3f three_dimensional_vec, NMath::CVec2f & output_screen_vec);
+	W2S_RESULT WorldToScreen(UU::CVec3f three_dimensional_vec, UU::CVec2f & output_screen_vec);
 }

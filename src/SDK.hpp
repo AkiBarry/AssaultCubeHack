@@ -1,5 +1,5 @@
 #pragma once
-#include "Vector.hpp"
+#include "UU.hpp"
 
 namespace NSDK
 {
@@ -15,12 +15,12 @@ namespace NSDK
 		bool IsVisible() const;
 
 		char							pad_0x0000[0x4]; //0x0000
-		NMath::CVec3f					cam_position; //0x0004 
-		NMath::CVec3f					velocity; //0x0010 
-		NMath::CVec3f					velocity_t; //0x001C 
-		NMath::CVec3f					delta_position; //0x0028 
-		NMath::CVec3f					position; //0x0034 
-		NMath::CAngle<float, 3, false>	view_angles; //0x0040 
+		UU::CVec3f						cam_position; //0x0004 
+		UU::CVec3f						velocity; //0x0010 
+		UU::CVec3f						velocity_t; //0x001C 
+		UU::CVec3f						delta_position; //0x0028 
+		UU::CVec3f						position; //0x0034 
+		UU::CAngle<float, 3, false>		view_angles; //0x0040 
 		float							pitch_velocity; //0x004C 
 		float							max_speed; //0x0050 
 		int32_t							time_in_air; //0x0054 

@@ -8,15 +8,6 @@
     <Filter Include="Files\Main">
       <UniqueIdentifier>{2d85d141-7595-4c93-a3cb-e84f24cb21d4}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Files\Math">
-      <UniqueIdentifier>{5df9e514-6f78-49ff-a32b-c7aa9d517672}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Math\Matrix">
-      <UniqueIdentifier>{f1947f4a-77e2-4e7d-823e-4c0c6bd9f641}</UniqueIdentifier>
-    </Filter>
-    <Filter Include="Files\Math\Vector">
-      <UniqueIdentifier>{8b98dc9f-f2c3-4c50-8988-46b6ee48d0c0}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Files\Cheat">
       <UniqueIdentifier>{409bbaa8-f578-4203-b2b1-1542732a772f}</UniqueIdentifier>
     </Filter>
@@ -73,17 +64,11 @@
     <ClCompile Include="..\src\Main.cpp">
       <Filter>Files\Main</Filter>
     </ClCompile>
-    <ClCompile Include="..\src\Math.cpp">
-      <Filter>Files\Math</Filter>
-    </ClCompile>
     <ClCompile Include="..\src\Cheat.cpp">
       <Filter>Files\Cheat</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Canvas.cpp">
       <Filter>Files\Util\Canvas</Filter>
-    </ClCompile>
-    <ClCompile Include="..\src\Colour.cpp">
-      <Filter>Files\Util\Colour</Filter>
     </ClCompile>
     <ClCompile Include="..\src\Console.cpp">
       <Filter>Files\Util\Logging\Console</Filter>
@@ -120,15 +105,6 @@
     </ClCompile>
   </ItemGroup>
   <ItemGroup>
-    <ClInclude Include="..\src\Math.hpp">
-      <Filter>Files\Math</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Matrix.hpp">
-      <Filter>Files\Math\Matrix</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Vector.hpp">
-      <Filter>Files\Math\Vector</Filter>
-    </ClInclude>
     <ClInclude Include="..\src\Cheat.hpp">
       <Filter>Files\Cheat</Filter>
     </ClInclude>

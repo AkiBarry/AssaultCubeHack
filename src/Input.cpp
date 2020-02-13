@@ -165,13 +165,13 @@ namespace NInput
 		return mouse_locked = !mouse_locked;
 	}
 
-	NMath::CVec2f GetMousePos()
+	UU::CVec2f GetMousePos()
 	{
 		POINT temp;
 		GetCursorPos(&temp);
 		ScreenToClient(_target_hwnd, &temp);
 
-		return NMath::CVec2f(temp.x, temp.y);
+		return UU::CVec2f(temp.x, temp.y);
 	}
 
 	bool IsKeyDown(int32_t key)

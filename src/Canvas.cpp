@@ -150,8 +150,8 @@ void NCanvas::InHookInitiate()
 		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
 		// Now store character for later use
 		NText::CCharacter character(texture,
-			NMath::CVec2f(NText::face->glyph->bitmap.width, NText::face->glyph->bitmap.rows),
-			NMath::CVec2f(NText::face->glyph->bitmap_left, NText::face->glyph->bitmap_top),
+			UU::CVec2f(NText::face->glyph->bitmap.width, NText::face->glyph->bitmap.rows),
+			UU::CVec2f(NText::face->glyph->bitmap_left, NText::face->glyph->bitmap_top),
 			static_cast<float>(NText::face->glyph->advance.x));
 
 		NText::characters.insert(std::pair<GLchar, NText::CCharacter>(c, character));
@@ -263,11 +263,11 @@ void NCanvas::End3D()
 	}
 }
 
-void NCanvas::NDraw::Rect(NMath::CVec2f position, NMath::CVec2f size, CColour colour)
+void NCanvas::NDraw::Rect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour)
 {
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
-	position -= NMath::CVec2f(0.f, 1.f);
+	position -= UU::CVec2f(0.f, 1.f);
 
 	glBegin(GL_QUADS);
 
@@ -279,9 +279,9 @@ void NCanvas::NDraw::Rect(NMath::CVec2f position, NMath::CVec2f size, CColour co
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedRect(NMath::CVec2f position, NMath::CVec2f size, CColour colour)
+void NCanvas::NDraw::OutlinedRect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour)
 {
-	size -= NMath::CVec2f(1.f, 1.f);
+	size -= UU::CVec2f(1.f, 1.f);
 
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
@@ -295,35 +295,35 @@ void NCanvas::NDraw::OutlinedRect(NMath::CVec2f position, NMath::CVec2f size, CC
 	glEnd();
 }
 
-void NCanvas::NDraw::Circle(NMath::CVec2f position, float radius, CColour colour)
+void NCanvas::NDraw::Circle(UU::CVec2f position, float radius, UU::CColour colour)
 {
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
 	glBegin(GL_TRIANGLE_FAN);
 
-	for (float ang = 0; ang < 2.f * NMath::FLT_PI; ang += 2.f * NMath::FLT_PI / ( 2 * NMath::FLT_PI * radius))
+	for (float ang = 0; ang < 2.f * UU::FLT_PI; ang += 2.f * UU::FLT_PI / ( 2 * UU::FLT_PI * radius))
 	{
-		glVertex2i(static_cast<GLint>(position[0] + radius * NMath::Cos(ang)), static_cast<GLint>(position[1] + radius * NMath::Sin(ang)));
+		glVertex2i(static_cast<GLint>(position[0] + radius * UU::Cos(ang)), static_cast<GLint>(position[1] + radius * UU::Sin(ang)));
 	}
 
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedCircle(NMath::CVec2f position, float radius, CColour colour)
+void NCanvas::NDraw::OutlinedCircle(UU::CVec2f position, float radius, UU::CColour colour)
 {
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
 	glBegin(GL_LINE_LOOP);
 
-	for (float ang = 0; ang < 2.f * NMath::FLT_PI ; ang += 2.f * NMath::FLT_PI / (2 * NMath::FLT_PI * radius))
+	for (float ang = 0; ang < 2.f * UU::FLT_PI ; ang += 2.f * UU::FLT_PI / (2 * UU::FLT_PI * radius))
 	{
-		glVertex2i(static_cast<GLint>(position[0] + radius * NMath::Cos(ang)), static_cast<GLint>(position[1] + radius * NMath::Sin(ang)));
+		glVertex2i(static_cast<GLint>(position[0] + radius * UU::Cos(ang)), static_cast<GLint>(position[1] + radius * UU::Sin(ang)));
 	}
 
 	glEnd();
 }
 
-void NCanvas::NDraw::Poly(size_t num_points, NMath::CVec2f * positions, CColour colour)
+void NCanvas::NDraw::Poly(size_t num_points, UU::CVec2f * positions, UU::CColour colour)
 {
 	if (num_points < 3)
 		return;
@@ -338,7 +338,7 @@ void NCanvas::NDraw::Poly(size_t num_points, NMath::CVec2f * positions, CColour 
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedPoly(size_t num_points, NMath::CVec2f * positions, CColour colour)
+void NCanvas::NDraw::OutlinedPoly(size_t num_points, UU::CVec2f * positions, UU::CColour colour)
 {
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
@@ -350,7 +350,7 @@ void NCanvas::NDraw::OutlinedPoly(size_t num_points, NMath::CVec2f * positions, 
 	glEnd();
 }
 
-void NCanvas::NDraw::Line(NMath::CVec2f position1, NMath::CVec2f position2, CColour colour)
+void NCanvas::NDraw::Line(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour)
 {
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
@@ -362,7 +362,7 @@ void NCanvas::NDraw::Line(NMath::CVec2f position1, NMath::CVec2f position2, CCol
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedLine(NMath::CVec2f position1, NMath::CVec2f position2, CColour colour)
+void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour)
 {
 	glLineWidth(3.f);
 	glColor4ub(0, 0, 0, colour.a);
@@ -385,7 +385,7 @@ void NCanvas::NDraw::OutlinedLine(NMath::CVec2f position1, NMath::CVec2f positio
 	glEnd();
 }
 
-void NCanvas::NDraw::Text(std::string text, NMath::CVec2f position, float size, CColour colour)
+void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, float size, UU::CColour colour)
 {
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
@@ -393,6 +393,7 @@ void NCanvas::NDraw::Text(std::string text, NMath::CVec2f position, float size, 
 	glEnable(GL_POINT_SMOOTH);
 	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_MULTISAMPLE_ARB);
 
 	size /= 48.f;
 
@@ -456,16 +457,16 @@ void NCanvas::NDraw::Text(std::string text, NMath::CVec2f position, float size, 
 	glPopAttrib();
 }
 
-void NCanvas::NDraw::Cuboid(NMath::CVec3f position, NMath::CVec3f size, CColour colour)
+void NCanvas::NDraw::Cuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour colour)
 {
 	glLineWidth(1.f);
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
-	auto temp = position - NMath::CVec3f(size[0] / 2.f, size[1] / 2.f, 0.f);
+	auto temp = position - UU::CVec3f(size[0] / 2.f, size[1] / 2.f, 0.f);
 
-	NMath::CVec3f corners[8] = {
-		temp, temp + NMath::CVec3f(size[0], 0.f, 0.f),  temp + NMath::CVec3f(size[0], size[1], 0.f), temp + NMath::CVec3f(0.f, size[1], 0.f),
-		temp + NMath::CVec3f(0.f, 0.f, size[2]), temp + NMath::CVec3f(size[0], 0.f, size[2]),  temp + size, temp + NMath::CVec3f(0.f, size[1], size[2]),
+	UU::CVec3f corners[8] = {
+		temp, temp + UU::CVec3f(size[0], 0.f, 0.f),  temp + UU::CVec3f(size[0], size[1], 0.f), temp + UU::CVec3f(0.f, size[1], 0.f),
+		temp + UU::CVec3f(0.f, 0.f, size[2]), temp + UU::CVec3f(size[0], 0.f, size[2]),  temp + size, temp + UU::CVec3f(0.f, size[1], size[2]),
 	};
 
 	// Bottom
@@ -529,16 +530,16 @@ void NCanvas::NDraw::Cuboid(NMath::CVec3f position, NMath::CVec3f size, CColour 
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedCuboid(NMath::CVec3f position, NMath::CVec3f size, CColour colour)
+void NCanvas::NDraw::OutlinedCuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour colour)
 {
 	glLineWidth(1.f);
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
-	const auto temp = position - NMath::CVec3f(size[0] / 2.f, size[1] / 2.f, 0.f);
+	const auto temp = position - UU::CVec3f(size[0] / 2.f, size[1] / 2.f, 0.f);
 
-	NMath::CVec3f corners[8] = {
-		temp, temp + NMath::CVec3f(size[0], 0.f, 0.f),  temp + NMath::CVec3f(size[0], size[1], 0.f), temp + NMath::CVec3f(0.f, size[1], 0.f),
-		temp + NMath::CVec3f(0.f, 0.f, size[2]), temp + NMath::CVec3f(size[0], 0.f, size[2]),  temp + size, temp + NMath::CVec3f(0.f, size[1], size[2]),
+	UU::CVec3f corners[8] = {
+		temp, temp + UU::CVec3f(size[0], 0.f, 0.f),  temp + UU::CVec3f(size[0], size[1], 0.f), temp + UU::CVec3f(0.f, size[1], 0.f),
+		temp + UU::CVec3f(0.f, 0.f, size[2]), temp + UU::CVec3f(size[0], 0.f, size[2]),  temp + size, temp + UU::CVec3f(0.f, size[1], size[2]),
 	};
 
 	glBegin(GL_LINE_STRIP);
@@ -578,7 +579,7 @@ void NCanvas::NDraw::OutlinedCuboid(NMath::CVec3f position, NMath::CVec3f size, 
 	glEnd();
 }
 
-void NCanvas::NDraw::Line(NMath::CVec3f position1, NMath::CVec3f position2, CColour colour)
+void NCanvas::NDraw::Line(UU::CVec3f position1, UU::CVec3f position2, UU::CColour colour)
 {
 	glLineWidth(1.f);
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
@@ -591,7 +592,7 @@ void NCanvas::NDraw::Line(NMath::CVec3f position1, NMath::CVec3f position2, CCol
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedLine(NMath::CVec3f position1, NMath::CVec3f position2, CColour colour)
+void NCanvas::NDraw::OutlinedLine(UU::CVec3f position1, UU::CVec3f position2, UU::CColour colour)
 {
 	glLineWidth(3.f);
 	glColor4ub(0, 0, 0, 255);

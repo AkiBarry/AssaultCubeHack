@@ -10,7 +10,7 @@ namespace NMisc
 	float w = 0.f;
 }
 
-NMisc::W2S_RESULT NMisc::WorldToScreen(NMath::CVec3f three_dimensional_vec, NMath::CVec2f & output_screen_vec)
+NMisc::W2S_RESULT NMisc::WorldToScreen(UU::CVec3f three_dimensional_vec, UU::CVec2f & output_screen_vec)
 {
 	const glm::mat4x4 view = glm::make_mat4x4(NGlobals::GetViewMatrix());
 
@@ -28,25 +28,25 @@ NMisc::W2S_RESULT NMisc::WorldToScreen(NMath::CVec3f three_dimensional_vec, NMat
 		return_value[0] *= inv_w;
 		return_value[1] *= inv_w;
 
-		if (NMath::Abs(return_value[0]) > 1.f || NMath::Abs(return_value[1]) > 1.f)
+		if (UU::Abs(return_value[0]) > 1.f || UU::Abs(return_value[1]) > 1.f)
 		{
 			results = W2S_RESULT::IN_FRONT;
 		}
 	}
 	else
 	{
-		const float abs_return_value_0 = NMath::Abs(return_value[0]);
-		const float abs_return_value_1 = NMath::Abs(return_value[1]);
+		const float abs_return_value_0 = UU::Abs(return_value[0]);
+		const float abs_return_value_1 = UU::Abs(return_value[1]);
 
 		if (abs_return_value_0 > abs_return_value_1)
 		{
-			return_value[0] = NMath::Sign(return_value[0]);
+			return_value[0] = UU::Sign(return_value[0]);
 			return_value[1] /= abs_return_value_0;
 		}
 		else
 		{
 			return_value[0] /= abs_return_value_1;
-			return_value[1] = NMath::Sign(return_value[1]);
+			return_value[1] = UU::Sign(return_value[1]);
 		}
 
 		results = W2S_RESULT::BEHIND;
@@ -61,7 +61,7 @@ NMisc::W2S_RESULT NMisc::WorldToScreen(NMath::CVec3f three_dimensional_vec, NMat
 	return_value[0] = x;
 	return_value[1] = y;
 
-	output_screen_vec = NMath::CVec2f(x, y);
+	output_screen_vec = UU::CVec2f(x, y);
 
 	return results;
 }

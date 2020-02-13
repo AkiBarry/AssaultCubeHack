@@ -1,11 +1,22 @@
 #include "Menu.hpp"
 #include "Canvas.hpp"
 #include "Input.hpp"
+#include "Console.hpp"
+#include "Globals.hpp"
 
 // Namespace Functions
 
 bool NMenu::is_activated = true;
 std::vector<NMenu::CBaseElement *> NMenu::scene;
+
+UU::CVec2f NMenu::ScreenResolution()
+{
+	GLfloat viewport[4];
+	
+	glGetFloatv(GL_VIEWPORT, viewport);
+
+	return UU::CVec2f(viewport[2], viewport[3]);
+}
 
 void NMenu::Activate()
 {
@@ -53,7 +64,9 @@ void NMenu::DrawAll()
 
 void NMenu::UpdateAndDrawAll()
 {
-	for (CBaseElement * i : scene)
+	UpdateAll();
+	DrawAll();
+	/*for (CBaseElement * i : scene)
 	{
 		if (!i->enabled)
 			continue;
@@ -74,7 +87,7 @@ void NMenu::UpdateAndDrawAll()
 			i->DrawWrap();
 			i->DrawChildren();
 		}
-	}
+	}*/
 }
 
 void NMenu::CBaseElement::UpdateWrap()
@@ -94,30 +107,30 @@ void NMenu::CBaseElement::DrawWrap()
 	}
 }
 
-NMath::CVec2f & NMenu::CPositioned::GetPosition()
+UU::CVec2f & NMenu::CPositioned::GetPosition()
 {
 	return position;
 }
 
-NMath::CVec2f NMenu::CPositioned::GetPosition() const
+UU::CVec2f NMenu::CPositioned::GetPosition() const
 {
 	return position;
 }
 
-NMath::CVec2f & NMenu::CPositioned::GetAbsPosition()
+UU::CVec2f & NMenu::CPositioned::GetAbsPosition()
 {
 	return abs_position;
 }
 
-NMath::CVec2f NMenu::CPositioned::GetAbsPosition() const
+UU::CVec2f NMenu::CPositioned::GetAbsPosition() const
 {
 	return abs_position;
 }
 
-void NMenu::CPositioned::SetPosition(const NMath::CVec2f & val)
+void NMenu::CPositioned::SetPosition(const UU::CVec2f & val)
 {
 	position = val;
-	const NMath::CVec2f boundary_delta = boundary_max - boundary_min;
+	const UU::CVec2f boundary_delta = boundary_max - boundary_min;
 
 	if (parent == nullptr)
 	{
@@ -126,8 +139,8 @@ void NMenu::CPositioned::SetPosition(const NMath::CVec2f & val)
 	}
 	else
 	{
-		abs_position = std::forward<NMath::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
-		boundary_min = std::forward<NMath::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
+		abs_position = std::forward<UU::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
+		boundary_min = std::forward<UU::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
 	}
 
 	boundary_max = boundary_min + boundary_delta;
@@ -144,20 +157,20 @@ void NMenu::CPositioned::SetPosition(const NMath::CVec2f & val)
 
 }
 
-void NMenu::CPositioned::SetPosition(NMath::CVec2f && val)
+void NMenu::CPositioned::SetPosition(UU::CVec2f && val)
 {
-	position = std::forward<NMath::CVec2f>(val);
-	const NMath::CVec2f boundary_delta = boundary_max - boundary_min;
+	position = std::forward<UU::CVec2f>(val);
+	const UU::CVec2f boundary_delta = boundary_max - boundary_min;
 
 	if (parent == nullptr)
 	{
-		abs_position = std::forward<NMath::CVec2f>(val);
-		boundary_min = std::forward<NMath::CVec2f>(val);
+		abs_position = std::forward<UU::CVec2f>(val);
+		boundary_min = std::forward<UU::CVec2f>(val);
 	}
 	else
 	{
-		abs_position = std::forward<NMath::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
-		boundary_min = std::forward<NMath::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
+		abs_position = std::forward<UU::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
+		boundary_min = std::forward<UU::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
 	}
 
 	boundary_max = boundary_min + boundary_delta;
@@ -173,6 +186,46 @@ void NMenu::CPositioned::SetPosition(NMath::CVec2f && val)
 	}
 }
 
+void NMenu::CPositioned::CenterHorizontal()
+{
+	UU::CVec2f offset(0.f, 0.f);
+	{
+		auto dim = dynamic_cast<CDimensioned*>(this);
+		if (dim != nullptr)
+		{
+			offset[0] += dim->GetSize()[0] / 2.f;
+		}
+	}
+	SetPosition(ScreenResolution() - offset);
+}
+
+void NMenu::CPositioned::CenterVertical()
+{
+	UU::CVec2f offset(0.f, 0.f);
+	{
+		auto dim = dynamic_cast<CDimensioned*>(this);
+		if (dim != nullptr)
+		{
+			offset[1] += dim->GetSize()[1] / 2.f;
+		}
+	}
+	SetPosition(ScreenResolution() / 2.f - offset);
+}
+
+void NMenu::CPositioned::Center()
+{
+	UU::CVec2f offset(0.f, 0.f);
+	{
+		auto dim = dynamic_cast<CDimensioned*>(this);
+		if (dim != nullptr)
+		{
+			offset += dim->GetSize() / 2.f;
+		}
+	}
+
+	SetPosition(ScreenResolution() / 2.f - offset);
+}
+
 // CBaseElement Functions
 
 void NMenu::CBaseElement::UpdateChildren()
@@ -182,8 +235,8 @@ void NMenu::CBaseElement::UpdateChildren()
 		if (!i->active || !i->enabled)
 			continue;
 
-		i->DrawWrap();
-		i->DrawChildren();
+		i->UpdateWrap();
+		i->UpdateChildren();
 	}
 }
 
@@ -233,26 +286,26 @@ NMenu::CBaseElement::~CBaseElement()
 	}
 }
 
-NMath::CVec2f & NMenu::CDimensioned::GetSize()
+UU::CVec2f & NMenu::CDimensioned::GetSize()
 {
 	return size;
 }
 
-NMath::CVec2f NMenu::CDimensioned::GetSize() const
+UU::CVec2f NMenu::CDimensioned::GetSize() const
 {
 	return size;
 }
 
-void NMenu::CDimensioned::SetSize(const NMath::CVec2f & val)
+void NMenu::CDimensioned::SetSize(const UU::CVec2f & val)
 {
 	size = val;
-	boundary_max = std::forward<NMath::CVec2f>(boundary_min + val);
+	boundary_max = std::forward<UU::CVec2f>(boundary_min + val);
 }
 
-void NMenu::CDimensioned::SetSize(NMath::CVec2f && val)
+void NMenu::CDimensioned::SetSize(UU::CVec2f && val)
 {
-	size = std::forward<NMath::CVec2f>(val);
-	boundary_max = std::forward<NMath::CVec2f>(boundary_min + val);
+	size = std::forward<UU::CVec2f>(val);
+	boundary_max = std::forward<UU::CVec2f>(boundary_min + val);
 }
 
 void NMenu::CDraggable::UpdateDragging()
@@ -313,50 +366,50 @@ void NMenu::CDraggable::UpdateDragging()
 
 }
 
-CColour NMenu::CColoured::GetColour() const
+UU::CColour NMenu::CColoured::GetColour() const
 {
 	return col;
 }
 
-CColour & NMenu::CColoured::GetColour()
+UU::CColour & NMenu::CColoured::GetColour()
 {
 	return col;
 }
 
-CColour NMenu::CColoured::GetOutlineColour() const
+UU::CColour NMenu::CColoured::GetOutlineColour() const
 {
 	return outline_col;
 }
 
-CColour & NMenu::CColoured::GetOutlineColour()
+UU::CColour & NMenu::CColoured::GetOutlineColour()
 {
 	return outline_col;
 }
 
-void NMenu::CColoured::SetColour(CColour && val)
+void NMenu::CColoured::SetColour(UU::CColour && val)
 {
-	col = std::forward<CColour>(val);
+	col = std::forward<UU::CColour>(val);
 }
-void NMenu::CColoured::SetColour(CHSB && val)
+void NMenu::CColoured::SetColour(UU::CHSB && val)
 {
-	col = std::forward<CColour>(val.ToColour());
-}
-
-void NMenu::CColoured::SetOutlineColour(CColour && val)
-{
-	outline_col = std::forward<CColour>(val);
+	col = std::forward<UU::CColour>(val.ToColour());
 }
 
-void NMenu::CColoured::SetOutlineColour(CHSB && val)
+void NMenu::CColoured::SetOutlineColour(UU::CColour && val)
 {
-	outline_col = std::forward<CColour>(val.ToColour());
+	outline_col = std::forward<UU::CColour>(val);
+}
+
+void NMenu::CColoured::SetOutlineColour(UU::CHSB && val)
+{
+	outline_col = std::forward<UU::CColour>(val.ToColour());
 }
 
 // CText Functions
 
 void NMenu::CText::Draw()
 {
-	NCanvas::NDraw::Text(text, abs_position, 16.f, CColour(0, 0, 0));
+	NCanvas::NDraw::Text(text, abs_position, 16.f, UU::CColour(0, 0, 0));
 }
 
 std::string NMenu::CText::GetFont() const
@@ -369,6 +422,25 @@ std::string & NMenu::CText::GetFont()
 	return font;
 }
 
+std::string NMenu::CText::GetText() const
+{
+	return text;
+}
+
+std::string & NMenu::CText::GetText()
+{
+	return text;
+}
+
+void NMenu::CText::SetText(const std::string & val)
+{
+	text = val;
+}
+void NMenu::CText::SetText(std::string && val)
+{
+	text = std::move(val);
+}
+
 // CWindow Functions
 
 float NMenu::CWindow::window_side_thickness = 3.f;
@@ -376,23 +448,23 @@ float NMenu::CWindow::window_top_thickness = 20.f;
 
 NMenu::CWindow::CWindow()
 {
-	boundary_max = boundary_min + NMath::CVec2f(2 * window_side_thickness, window_top_thickness + window_side_thickness);
+	boundary_max = boundary_min + UU::CVec2f(2 * window_side_thickness, window_top_thickness + window_side_thickness);
 
 	drag_area_min = boundary_min;
 	drag_area_max = boundary_max;
 	
 	window_frame = CreateItem<CFrame>(this);
-	window_frame->SetPosition(NMath::CVec2f(0.f, 0.f));
+	window_frame->SetPosition(UU::CVec2f(0.f, 0.f));
 	window_frame->SetSize(GetSize());
 
 	window_close_button = CreateItem<CButton>(this);
-	window_close_button->SetPosition(size - NMath::CVec2f(20.f, 0.f));
-	window_close_button->SetSize(NMath::CVec2f(40.f, window_top_thickness - 3.f));
-	window_close_button->SetColour(CColour(200, 80, 80));
+	window_close_button->SetPosition(size - UU::CVec2f(20.f, 0.f));
+	window_close_button->SetSize(UU::CVec2f(40.f, window_top_thickness - 3.f));
+	window_close_button->SetColour(UU::CColour(200, 80, 80));
 	window_close_button->OnClick = [&] {enabled = false; };
 
 	window_text = CreateItem<CText>(this);
-	window_text->SetPosition(NMath::CVec2f(0.f, -window_side_thickness));
+	window_text->SetPosition(UU::CVec2f(0.f, -window_side_thickness));
 }
 
 void NMenu::CWindow::Update()
@@ -402,24 +474,24 @@ void NMenu::CWindow::Update()
 
 void NMenu::CWindow::Draw()
 {
-	NCanvas::NDraw::Rect(boundary_min + NMath::CVec2f(1.f, 1.f), boundary_max - boundary_min - NMath::CVec2f(2.f, 2.f), col);
+	NCanvas::NDraw::Rect(boundary_min + UU::CVec2f(1.f, 1.f), boundary_max - boundary_min - UU::CVec2f(2.f, 2.f), col);
 	NCanvas::NDraw::OutlinedRect(boundary_min, boundary_max - boundary_min, outline_col);
 }
 
-void NMenu::CWindow::SetPosition(NMath::CVec2f && val)
+void NMenu::CWindow::SetPosition(UU::CVec2f && val)
 {
-	position = std::forward<NMath::CVec2f>(val);
-	const NMath::CVec2f boundary_delta = std::forward<NMath::CVec2f>(boundary_max - boundary_min);
+	position = std::forward<UU::CVec2f>(val);
+	const UU::CVec2f boundary_delta = std::forward<UU::CVec2f>(boundary_max - boundary_min);
 
 	if (parent == nullptr)
 	{
-		abs_position = std::forward<NMath::CVec2f>(val);
-		boundary_min = std::forward<NMath::CVec2f>(val - NMath::CVec2f(window_side_thickness, window_top_thickness));
+		abs_position = std::forward<UU::CVec2f>(val);
+		boundary_min = std::forward<UU::CVec2f>(val - UU::CVec2f(window_side_thickness, window_top_thickness));
 	}
 	else
 	{
-		abs_position = std::forward<NMath::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
-		boundary_min = std::forward<NMath::CVec2f>(parent->boundary_min + val - NMath::CVec2f(window_side_thickness, window_top_thickness));
+		abs_position = std::forward<UU::CVec2f>(dynamic_cast<CPositioned *>(parent)->abs_position + position);
+		boundary_min = std::forward<UU::CVec2f>(parent->boundary_min + val - UU::CVec2f(window_side_thickness, window_top_thickness));
 	}
 
 	boundary_max = boundary_min + boundary_delta;
@@ -438,20 +510,20 @@ void NMenu::CWindow::SetPosition(NMath::CVec2f && val)
 	}
 }
 
-void NMenu::CWindow::SetSize(NMath::CVec2f && val)
+void NMenu::CWindow::SetSize(UU::CVec2f && val)
 {
-	size = std::forward<NMath::CVec2f>(val);
-	boundary_max = std::forward<NMath::CVec2f>(position + val + NMath::CVec2f(window_side_thickness, window_side_thickness));
+	size = std::forward<UU::CVec2f>(val);
+	boundary_max = std::forward<UU::CVec2f>(position + val + UU::CVec2f(window_side_thickness, window_side_thickness));
 
 	drag_area_max = boundary_max;
 
-	window_frame->SetSize(std::forward<NMath::CVec2f>(val));
-	window_close_button->SetPosition(NMath::CVec2f(val[0] - 40.f, -window_top_thickness));
+	window_frame->SetSize(std::forward<UU::CVec2f>(val));
+	window_close_button->SetPosition(UU::CVec2f(val[0] - 40.f, -window_top_thickness));
 }
 
-void NMenu::CWindow::SetWindowPosition(NMath::CVec2f && val)
+void NMenu::CWindow::SetWindowPosition(UU::CVec2f && val)
 {
-	SetPosition(val + NMath::CVec2f(window_side_thickness, window_top_thickness));
+	SetPosition(val + UU::CVec2f(window_side_thickness, window_top_thickness));
 }
 
 std::string NMenu::CWindow::GetFont() const
@@ -470,17 +542,17 @@ void NMenu::CWindow::SetFont(std::string && val)
 
 std::string NMenu::CWindow::GetText() const
 {
-	return window_text->text;
+	return window_text->GetText();
 }
 
 std::string & NMenu::CWindow::GetText()
 {
-	return window_text->text;
+	return window_text->GetText();
 }
 
 void NMenu::CWindow::SetText(std::string && val)
 {
-	window_text->text = std::forward<std::string>(val);
+	window_text->GetText() = std::forward<std::string>(val);
 }
 
 void NMenu::CWindow::ShowCloseButton(bool val)
@@ -500,7 +572,7 @@ void NMenu::CFrame::Draw()
 NMenu::CCheckBox::CCheckBox()
 {
 	checkbox_text = CreateItem<CText>(this);
-	checkbox_text->SetPosition(NMath::CVec2f(size[0] + 2.f, size[1]));
+	checkbox_text->SetPosition(UU::CVec2f(size[0] + 2.f, size[1]));
 }
 
 void NMenu::CCheckBox::Update()
@@ -511,7 +583,8 @@ void NMenu::CCheckBox::Update()
 	{
 		if (NInput::WasKeyReleased(VK_LBUTTON))
 		{
-			if (mouse_position.WithinAABox(boundary_min, boundary_max))
+			if (mouse_position.WithinAABox(boundary_min, boundary_max)
+				|| mouse_position.WithinAABox(checkbox_text->boundary_min, checkbox_text->boundary_max))
 			{
 				var->SetVal(!var->GetVal());
 			}
@@ -534,28 +607,28 @@ void NMenu::CCheckBox::Draw()
 
 	if (is_clicked)
 	{
-		NCanvas::NDraw::Rect(abs_position + NMath::CVec2f(1.f, 1.f), size - NMath::CVec2f(2.f, 2.f), CColour(200, 200, 200));
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(1.f, 1.f), size - UU::CVec2f(2.f, 2.f), UU::CColour(200, 200, 200));
 	}
 	else if (mouse_position.WithinAABox(boundary_min, boundary_max))
 	{
-		NCanvas::NDraw::Rect(abs_position + NMath::CVec2f(1.f, 1.f), size - NMath::CVec2f(2.f, 2.f), CColour(255, 255, 255));
-		NCanvas::NDraw::Rect(abs_position + NMath::CVec2f(2.f, 2.f), size - NMath::CVec2f(4.f, 4.f), CColour(200, 200, 200));
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(1.f, 1.f), size - UU::CVec2f(2.f, 2.f), UU::CColour(255, 255, 255));
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(2.f, 2.f), size - UU::CVec2f(4.f, 4.f), UU::CColour(200, 200, 200));
 	}
 	else
 	{
-		NCanvas::NDraw::Rect(abs_position + NMath::CVec2f(1.f, 1.f), size - NMath::CVec2f(2.f, 2.f), CColour(255, 255, 255));
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(1.f, 1.f), size - UU::CVec2f(2.f, 2.f), UU::CColour(255, 255, 255));
 	}
 
 	if (GetVal())
-		NCanvas::NDraw::Rect(abs_position + NMath::CVec2f(2.f, 2.f), size - NMath::CVec2f(4.f, 4.f), col);
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(2.f, 2.f), size - UU::CVec2f(4.f, 4.f), col);
 
 	NCanvas::NDraw::OutlinedRect(abs_position, size, outline_col);
 }
 
-void NMenu::CCheckBox::SetSize(NMath::CVec2f && val)
+void NMenu::CCheckBox::SetSize(UU::CVec2f && val)
 {
-	CDimensioned::SetSize(std::forward<NMath::CVec2f>(val));
-	checkbox_text->SetPosition(size + NMath::CVec2f(size[0] * 0.2f, 0.f));
+	CDimensioned::SetSize(std::forward<UU::CVec2f>(val));
+	checkbox_text->SetPosition(size + UU::CVec2f(size[0] * 0.2f, 0.f));
 }
 
 void NMenu::CCheckBox::SetVariable(CVariable<bool> * val)
@@ -588,17 +661,17 @@ void NMenu::CCheckBox::SetFont(std::string && val)
 
 std::string NMenu::CCheckBox::GetText() const
 {
-	return checkbox_text->text;
+	return checkbox_text->GetText();
 }
 
 std::string & NMenu::CCheckBox::GetText()
 {
-	return checkbox_text->text;
+	return checkbox_text->GetText();
 }
 
 void NMenu::CCheckBox::SetText(std::string && val)
 {
-	checkbox_text->text = std::forward<std::string>(val);
+	checkbox_text->GetText() = std::forward<std::string>(val);
 }
 
 bool & NMenu::CCheckBox::GetVal()
@@ -613,7 +686,7 @@ bool NMenu::CCheckBox::GetVal() const
 NMenu::CButton::CButton()
 {
 	button_text = CreateItem<CText>(this);
-	button_text->SetPosition(NMath::CVec2f(0.f, 0.f));
+	button_text->SetPosition(UU::CVec2f(0.f, 0.f));
 }
 
 void NMenu::CButton::Update()
@@ -666,11 +739,11 @@ void NMenu::CButton::Draw()
 	NCanvas::NDraw::OutlinedRect(abs_position, size, outline_col);
 }
 
-void NMenu::CButton::SetColour(CColour && val)
+void NMenu::CButton::SetColour(UU::CColour && val)
 {
-	col = std::forward<CColour>(val);
-	hover_col = std::forward<CColour>(CColour(NMath::Min(val.r + 15, 255), NMath::Min(val.g + 15, 255), NMath::Min(val.b + 15, 255), val.a));
-	clicked_col = std::forward<CColour>(CColour(NMath::Max(val.r - 15, 0), NMath::Max(val.g - 15, 0), NMath::Max(val.b - 15, 0), val.a));
+	col = val;
+	hover_col = UU::CColour(UU::Min(val.r + 15, 255), UU::Min(val.g + 15, 255), UU::Min(val.b + 15, 255), static_cast<int32_t>(val.a));
+	clicked_col = UU::CColour(UU::Max(val.r - 15, 0), UU::Max(val.g - 15, 0), UU::Max(val.b - 15, 0), static_cast<int32_t>(val.a));
 }
 
 std::string NMenu::CButton::GetFont() const
@@ -690,16 +763,16 @@ void NMenu::CButton::SetFont(std::string && val)
 
 std::string NMenu::CButton::GetText() const
 {
-	return button_text->text;
+	return button_text->GetText();
 }
 
 std::string & NMenu::CButton::GetText()
 {
-	return button_text->text;
+	return button_text->GetText();
 }
 
 void NMenu::CButton::SetText(std::string && val)
 {
-	button_text->text = std::forward<std::string>(val);
-	button_text->SetPosition(NMath::CVec2f(0.f, size[1]));
+	button_text->SetText(std::forward<std::string>(val));
+	button_text->SetPosition(UU::CVec2f(0.f, size[1]));
 }

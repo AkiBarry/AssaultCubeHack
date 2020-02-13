@@ -10,13 +10,13 @@ std::string NGlobals::dll_folder_path;
 ptr_t		NGlobals::game_base_address;
 
 
-NMath::CVec2f NGlobals::GameResolution()
+UU::CVec2f NGlobals::GameResolution()
 {
 	GLfloat viewport[4];
 
 	glGetFloatv(GL_VIEWPORT, viewport);
-
-	return NMath::CVec2f(viewport[2], viewport[3]);
+	
+	return UU::CVec2f(viewport[2], viewport[3]);
 }
 
 NSDK::SPlayer & NGlobals::LocalPlayer()
@@ -83,7 +83,7 @@ DEFINE_GLOBAL_VAR(bool,						esp_distance,						false);
 DEFINE_GLOBAL_VAR(bool,						esp_barrel,							false);
 DEFINE_GLOBAL_VAR(bool,						esp_hitbox,							false);
 DEFINE_GLOBAL_VAR(bool,						esp_filled_hitbox,					false);
-DEFINE_GLOBAL_VAR(bool,						esp_snapline,						false);
+DEFINE_GLOBAL_VAR(bool,						esp_snapline,						true);
 DEFINE_GLOBAL_VAR(SNAPLINE_POSITION,		esp_snapline_position,				SNAPLINE_POSITION::CENTER);
 
 DEFINE_GLOBAL_VAR(bool,						esp_chams,							false);
@@ -113,7 +113,7 @@ DEFINE_GLOBAL_VAR(bool,						radar_circular,						false);
 DEFINE_GLOBAL_VAR(bool,						miscs_enable,						true);
 DEFINE_GLOBAL_VAR(bool,						miscs_bunny_hop,					true);
 DEFINE_GLOBAL_VAR(bool,						miscs_edge_jump,					false);
-DEFINE_GLOBAL_VAR(bool,						miscs_fly,							false);
+DEFINE_GLOBAL_VAR(bool,						miscs_fly,							true);
 DEFINE_GLOBAL_VAR(bool,						miscs_auto_pistol,					true);
 DEFINE_GLOBAL_VAR(bool,						miscs_auto_aim,						false);
 DEFINE_GLOBAL_VAR(bool,						miscs_no_spread,					false);
@@ -150,5 +150,7 @@ DEFINE_MENU_ITEM(CCheckBox,					aimbot_auto_shoot);
 DEFINE_MENU_ITEM(CCheckBox,					aimbot_auto_duck);
 DEFINE_MENU_ITEM(CCheckBox,					aimbot_body_aim);
 DEFINE_MENU_ITEM(CCheckBox,					aimbot_locked);
+
+DEFINE_MENU_ITEM(CSlider<float>,			esp_test);
 
 DEFINE_MENU_ITEM(CWindow,					radar_window);

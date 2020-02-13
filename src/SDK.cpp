@@ -6,7 +6,7 @@
 
 struct STraceResult
 {
-	NMath::CVec3f end;
+	UU::CVec3f end;
 	bool collided;
 };
 
@@ -14,8 +14,8 @@ struct STraceResult
 bool NSDK::SPlayer::IsVisible() const
 {
 	STraceResult trace_result;
-	NMath::CVec3f from = NGlobals::LocalPlayer().cam_position;
-	NMath::CVec3f to = cam_position;
+	UU::CVec3f from = NGlobals::LocalPlayer().cam_position;
+	UU::CVec3f to = cam_position;
 
 	DWORD traceLine = 0x48A310;
 	

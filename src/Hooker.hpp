@@ -12,11 +12,11 @@
 using tglBegin = void (APIENTRY *)(GLenum);
 using twglSwapBuffers = BOOL(__stdcall *) (_In_ HDC hDc);
 
-twglSwapBuffers owglSwapBuffers;
-twglSwapBuffers nwglSwapBuffers;
+inline twglSwapBuffers owglSwapBuffers;
+inline twglSwapBuffers nwglSwapBuffers;
 
-tglBegin oglBegin;
-tglBegin nglBegin;
+inline tglBegin oglBegin;
+inline tglBegin nglBegin;
 
 CHook temp;
 
@@ -24,7 +24,7 @@ static bool first_time = true;
 
 inline void FirstTime()
 {
-
+	NCheat::Initiate();
 }
 
 inline BOOL CheatLoop(_In_ HDC hDc)
