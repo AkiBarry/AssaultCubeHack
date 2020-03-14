@@ -1,2 +1,2 @@
 # AssaultCubeHack
-A (quite) simple assault cube hack made completely from scratch
+A (quite) simple assault cube hack made completely from scratch.
