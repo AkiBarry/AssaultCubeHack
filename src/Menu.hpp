@@ -4,6 +4,7 @@
 #include "Variable.hpp"
 #include "UU.hpp"
 #include <functional>
+#include <sstream>
 #include <windows.h>
 
 namespace NMenu
@@ -12,10 +13,10 @@ namespace NMenu
 	class CFrame;
 	class CButton;
 	class CCheckBox;
-}
+/*}
 
 namespace NMenu
-{
+{*/
 	extern bool is_activated;
 	extern std::vector<CBaseElement*> scene;
 	
@@ -280,9 +281,9 @@ namespace NMenu
 		T min = T(0);
 		T max = T(1);
 		CText * slider_text;
-		float slider_width = 10.f;
+		float slider_width = 20.f;
 		bool is_dragged = false;
-		UU::CVec2f drag_start_offset;
+		float drag_start_offset;
 	public:
 		CSlider();
 
@@ -298,6 +299,7 @@ namespace NMenu
 		T &				GetVal();
 		T				GetVal() const;
 
+		void			SetVal(const T& val);
 		void			SetVal(T&& val);
 
 		std::string		GetFont() const override;
@@ -336,10 +338,7 @@ ItemType * NMenu::CreateItem(CBaseElement * parent /* = nullptr */)
 	return temp_item;
 }
 
-
 /* Slider definitions */
-
-
 
 template<typename T>
 NMenu::CSlider<T>::CSlider()
@@ -358,8 +357,27 @@ void NMenu::CSlider<T>::Update()
 
 	if(is_dragged)
 	{
-		float slider_pos = (mouse_position[0] - boundary_min[0]) / (boundary_max[0] - boundary_min[0]);
-		SetVal(slider_pos * (max - min) + min);
+		float slider_pos = (mouse_position[0] - drag_start_offset - boundary_min[0]) / (boundary_max[0] - boundary_min[0]);
+
+		if (slider_pos < 0.f)
+		{
+			SetVal(min);
+		}
+		else if (slider_pos > 1.f)
+		{
+			SetVal(max);
+		}
+		else
+		{
+			if constexpr (std::is_integral_v<T>)
+			{
+				SetVal(T(0.5f + slider_pos * (max - min) + min));
+			}
+			else
+			{
+				SetVal(T(slider_pos * (max - min) + min));
+			}
+		}
 		
 		if (NInput::WasKeyReleased(VK_LBUTTON))
 		{
@@ -371,15 +389,18 @@ void NMenu::CSlider<T>::Update()
 		if (NInput::WasKeyPressed(VK_LBUTTON))
 		{
 			float slider_pos = size[0] * (float)(var->GetVal() - min) / (float)(max - min);
-			UU::CVec2f slide_bounds_min = UU::CVec2f(slider_pos - slider_width / 2.f, boundary_min[1]);
-			UU::CVec2f slide_bounds_max = UU::CVec2f(slider_pos - slider_width / 2.f, boundary_max[1]);;
+			UU::CVec2f slide_bounds_min = UU::CVec2f(abs_position[0] + slider_pos - slider_width / 2.f, boundary_min[1]);
+			UU::CVec2f slide_bounds_max = UU::CVec2f(abs_position[0] + slider_pos + slider_width / 2.f, boundary_max[1]);;
 
 			if (mouse_position.WithinAABox(slide_bounds_min, slide_bounds_max))
+			{
 				is_dragged = true;
-			else if (mouse_position.WithinAABox(slide_bounds_min, slide_bounds_max))
+				drag_start_offset = mouse_position[0] - slide_bounds_min[0];
+			}
+			else if (mouse_position.WithinAABox(boundary_min, boundary_max))
 			{
 				float slider_frac = (mouse_position[0] - boundary_min[0]) / (boundary_max[0] - boundary_min[0]);
-				SetVal(slider_frac * (max - min) + min);
+				SetVal(T(slider_frac * (max - min) + min));
 			}
 		}
 	}
@@ -403,25 +424,36 @@ void NMenu::CSlider<T>::Draw()
 			UU::CVec2f(slider_width, size[1]),
 			dragged_col);
 	}
-	else if (mouse_position.WithinAABox(boundary_min, boundary_max))
-	{
-		NCanvas::NDraw::Rect(
-			abs_position + UU::CVec2f(slider_pos - slider_width / 2.f, 0.f), 
-			UU::CVec2f(slider_width, size[1]),
-			hover_col);
-	}
 	else
 	{
-		NCanvas::NDraw::Rect(
-			abs_position + UU::CVec2f(slider_pos - slider_width / 2.f, 0.f), 
-			UU::CVec2f(slider_width, size[1]),
-			col);
+		UU::CVec2f slide_bounds_min = UU::CVec2f(abs_position[0] + slider_pos - slider_width / 2.f, boundary_min[1]);
+		UU::CVec2f slide_bounds_max = UU::CVec2f(abs_position[0] + slider_pos + slider_width / 2.f, boundary_max[1]);;
+		
+		if (mouse_position.WithinAABox(slide_bounds_min, slide_bounds_max))
+		{
+			NCanvas::NDraw::Rect(
+				abs_position + UU::CVec2f(slider_pos - slider_width / 2.f, 0.f), 
+				UU::CVec2f(slider_width, size[1]),
+				hover_col);
+		}
+		else
+		{
+			NCanvas::NDraw::Rect(
+				abs_position + UU::CVec2f(slider_pos - slider_width / 2.f, 0.f), 
+				UU::CVec2f(slider_width, size[1]),
+				col);
+		}
 	}
 
 	NCanvas::NDraw::OutlinedRect(
 		abs_position + UU::CVec2f(slider_pos - slider_width / 2.f, 0.f), 
 		UU::CVec2f(slider_width, size[1]),
 		outline_col);
+
+	std::ostringstream out;
+	out << GetVal();
+
+	NCanvas::NDraw::Text(out.str(), abs_position + size, 10.f, UU::CColour::Black);
 }
 
 template<typename T>
@@ -455,6 +487,12 @@ template<typename T>
 T NMenu::CSlider<T>::GetVal() const
 {
 	return var->GetVal();
+}
+
+template<typename T>
+void NMenu::CSlider<T>::SetVal(const T & val)
+{
+	var->SetVal(val);
 }
 
 template<typename T>

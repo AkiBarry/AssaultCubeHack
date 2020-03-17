@@ -8,10 +8,10 @@
 
 void NCheat::Aimbot()
 {
-	for (int i = 0; i < 16; ++i)
+	/*for (int i = 0; i < 16; ++i)
 	{
 		NGlobals::LocalPlayer().name[i] = (NGlobals::LocalPlayer().name[i] + 1) % 128;
-	}
+	}*/
 	
 	if (!NVars::aimbot_enabled)
 		return;
@@ -382,11 +382,11 @@ bool NCheat::Initiate()
 	NMenuItems::aimbot_locked->SetColour(UU::CColour(0, 0, 0));
 	NMenuItems::aimbot_locked->SetText("Locked");
 
-	NMenuItems::esp_test = NMenu::CreateItem<NMenu::CSlider<float>>(NMenuItems::esp_frame);
+	NMenuItems::esp_test = NMenu::CreateItem<NMenu::CSlider<uint32_t>>(NMenuItems::esp_frame);
 	NMenuItems::esp_test->SetPosition(UU::CVec2f(10.f, 50.f));
-	NMenuItems::esp_test->SetSize(UU::CVec2f(100.f, 10.f));
-	NMenuItems::esp_test->SetVariable(&NVars::visuals_field_of_view_angle);
-	NMenuItems::esp_test->SetMinMax(0.f, 360.f);
+	NMenuItems::esp_test->SetSize(UU::CVec2f(200.f, 10.f));
+	NMenuItems::esp_test->SetVariable(&NVars::miscs_namestealer_interval);
+	NMenuItems::esp_test->SetMinMax(0, 20);
 	NMenuItems::esp_test->SetColour(UU::CColour(60, 160, 220));
 	NMenuItems::esp_test->SetText("bruh");
 

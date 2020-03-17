@@ -14,6 +14,7 @@ public:
 	T GetVal() const;
 	T& GetVal();
 
+	void SetVal(const T& val);
 	void SetVal(T&& val);
 
 private:
@@ -48,7 +49,13 @@ T & CVariable<T>::GetVal()
 }
 
 template<class T>
+void CVariable<T>::SetVal(const T & val)
+{
+	data = val;
+}
+
+template<class T>
 void CVariable<T>::SetVal(T&& val)
 {
-	data = std::forward<T>(val);
+	data = val;
 }

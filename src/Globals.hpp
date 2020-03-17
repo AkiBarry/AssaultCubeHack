@@ -190,7 +190,7 @@ namespace NMenuItems
 	DECLARE_MENU_ITEM(CCheckBox,				aimbot_body_aim);
 	DECLARE_MENU_ITEM(CCheckBox,				aimbot_locked);
 
-	DECLARE_MENU_ITEM(CSlider<float>,			esp_test);
+	DECLARE_MENU_ITEM(CSlider<uint32_t>,			esp_test);
 
 	DECLARE_MENU_ITEM(CWindow,					radar_window);
 }

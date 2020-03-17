@@ -151,6 +151,6 @@ DEFINE_MENU_ITEM(CCheckBox,					aimbot_auto_duck);
 DEFINE_MENU_ITEM(CCheckBox,					aimbot_body_aim);
 DEFINE_MENU_ITEM(CCheckBox,					aimbot_locked);
 
-DEFINE_MENU_ITEM(CSlider<float>,			esp_test);
+DEFINE_MENU_ITEM(CSlider<uint32_t>,			esp_test);
 
 DEFINE_MENU_ITEM(CWindow,					radar_window);
