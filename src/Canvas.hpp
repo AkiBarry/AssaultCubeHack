@@ -11,6 +11,8 @@
 #include FT_FREETYPE_H
 #include <map>
 
+#include "Types.hpp"
+
 namespace NCanvas
 {
 	bool Initiate();
@@ -31,6 +33,9 @@ namespace NCanvas
 
 	namespace NDraw
 	{
+		// Init
+		void PreloadFont(std::string path, uint_t size);
+		
 		//2D
 
 		void Rect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour);
@@ -63,7 +68,7 @@ namespace NCanvas
 				: texture_id(_texture_id), size(_size), bearing(_bearing), advance(_advance) {}
 
 			uint32_t					texture_id = 0;  // ID handle of the glyph texture
-			UU::CVec2f	size = UU::CVec2f(0.f, 0.f);			// Size of glyph
+			UU::CVec2f	size = UU::CVec2f(0.f, 0.f);				// Size of glyph
 			UU::CVec2f	bearing = UU::CVec2f(0.f, 0.f);		// Offset from baseline to left/top of glyph
 			float						advance = 0;    // Offset to advance to next glyph
 		};

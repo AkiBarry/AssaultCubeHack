@@ -20,9 +20,6 @@
     <Filter Include="Files\Util\Canvas">
       <UniqueIdentifier>{5211e482-7b85-4232-a096-ccf11bf22c0a}</UniqueIdentifier>
     </Filter>
-    <Filter Include="Files\Util\Colour">
-      <UniqueIdentifier>{541c22b3-cd47-472f-8d67-66f491cedc9e}</UniqueIdentifier>
-    </Filter>
     <Filter Include="Files\Util\Memory">
       <UniqueIdentifier>{94078ac2-54f9-46f1-83c9-330852818ccc}</UniqueIdentifier>
     </Filter>
@@ -110,9 +107,6 @@
     </ClInclude>
     <ClInclude Include="..\src\Canvas.hpp">
       <Filter>Files\Util\Canvas</Filter>
-    </ClInclude>
-    <ClInclude Include="..\src\Colour.hpp">
-      <Filter>Files\Util\Colour</Filter>
     </ClInclude>
     <ClInclude Include="..\src\Console.hpp">
       <Filter>Files\Util\Logging\Console</Filter>

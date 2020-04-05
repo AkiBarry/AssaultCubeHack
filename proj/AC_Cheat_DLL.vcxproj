@@ -173,7 +173,6 @@
   <ItemGroup>
     <ClInclude Include="..\src\Canvas.hpp" />
     <ClInclude Include="..\src\Cheat.hpp" />
-    <ClInclude Include="..\src\Colour.hpp" />
     <ClInclude Include="..\src\Console.hpp" />
     <ClInclude Include="..\src\Globals.hpp" />
     <ClInclude Include="..\src\Hook.hpp" />

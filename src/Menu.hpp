@@ -3,6 +3,9 @@
 #include "Cursor.hpp"
 #include "Variable.hpp"
 #include "UU.hpp"
+#include "Input.hpp"
+#include "Canvas.hpp"
+
 #include <functional>
 #include <sstream>
 #include <windows.h>
