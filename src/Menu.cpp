@@ -409,7 +409,7 @@ void NMenu::CColoured::SetOutlineColour(UU::CHSB && val)
 
 void NMenu::CText::Draw()
 {
-	NCanvas::NDraw::Text(text, abs_position, 16.f, UU::CColour(0, 0, 0));
+	NCanvas::NDraw::Text(text, abs_position, "consolas.ttf", 16, UU::CColour(0, 0, 0));
 }
 
 std::string NMenu::CText::GetFont() const

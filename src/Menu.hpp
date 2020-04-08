@@ -456,7 +456,7 @@ void NMenu::CSlider<T>::Draw()
 	std::ostringstream out;
 	out << GetVal();
 
-	NCanvas::NDraw::Text(out.str(), abs_position + size, 10.f, UU::CColour::Black);
+	NCanvas::NDraw::Text(out.str(), abs_position + size, "consolas.ttf", 16, UU::CColour::Black);
 }
 
 template<typename T>

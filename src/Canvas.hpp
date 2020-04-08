@@ -32,10 +32,7 @@ namespace NCanvas
 	void End3D();
 
 	namespace NDraw
-	{
-		// Init
-		void PreloadFont(std::string path, uint_t size);
-		
+	{	
 		//2D
 
 		void Rect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour);
@@ -46,7 +43,7 @@ namespace NCanvas
 		void OutlinedPoly(size_t num_points, UU::CVec2f *  positions, UU::CColour colour);
 		void Line(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour);
 		void OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour);
-		void Text(std::string text, UU::CVec2f position, float size, UU::CColour colour);
+		void Text(std::string text, UU::CVec2f position, std::string font, uint_t size, UU::CColour colour);
 
 		// 3D
 
@@ -64,21 +61,25 @@ namespace NCanvas
 		public:
 			CCharacter() = default;
 
-			CCharacter(uint32_t _texture_id, UU::CVec2f _size, UU::CVec2f _bearing, float _advance) 
+			CCharacter(uint32_t _texture_id, UU::CVec2ui _size, UU::CVec2i _bearing, float _advance) 
 				: texture_id(_texture_id), size(_size), bearing(_bearing), advance(_advance) {}
 
-			uint32_t					texture_id = 0;  // ID handle of the glyph texture
-			UU::CVec2f	size = UU::CVec2f(0.f, 0.f);				// Size of glyph
-			UU::CVec2f	bearing = UU::CVec2f(0.f, 0.f);		// Offset from baseline to left/top of glyph
-			float						advance = 0;    // Offset to advance to next glyph
+			uint32_t					texture_id	= 0;					// ID handle of the glyph texture
+			UU::CVec2ui					size		= UU::CVec2ui(0, 0);	// Size of glyph
+			UU::CVec2i					bearing		= UU::CVec2i(0, 0);	// Offset from baseline to left/top of glyph
+			float						advance		= 0;					// Offset to advance to next glyph
 		};
 
 		GLuint CompileShaders();
 
+		FT_Face GetFontFace(std::string font);
+		CCharacter& GetCharacter(FT_Face face, uint_t size, char32_t c);
+
+		void PreloadFont(std::string font, uint_t size);
+
 		extern FT_Library ft;
-		extern FT_Face face;
+		extern std::map<std::string, FT_Face> font_faces;
 		extern GLuint VAO, VBO;
-		extern std::map<int32_t, CCharacter> characters;
-		
+		extern std::map<std::tuple<FT_Face, uint_t, char32_t>, CCharacter> characters;
 	}
 }

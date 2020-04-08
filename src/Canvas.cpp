@@ -1,4 +1,9 @@
+#define _SILENCE_CXX17_CODECVT_HEADER_DEPRECATION_WARNING
+
 #include "Canvas.hpp"
+
+#include <codecvt>
+
 #include "Globals.hpp"
 #include "Console.hpp"
 #include <Windows.h>
@@ -15,83 +20,17 @@
 #include <sstream>
 #include <vector>
 #include <fstream>
+#include <locale>
 
 namespace NCanvas
 {
 	namespace NText
 	{
 		FT_Library ft;
-		FT_Face face;
+		std::map<std::string, FT_Face> font_faces;
 		GLuint VAO, VBO;
-		std::map<int32_t, CCharacter> characters;
+		std::map<std::tuple<FT_Face, uint_t, char32_t>, CCharacter> characters;
 		GLuint program;
-
-
-		GLuint CompileShaders() 
-		{
-			static const GLchar * vertex_shader_source[] = {
-			"#version 330 core															\n"
-			"layout(location = 0) in vec4 vertex; // <vec2 pos, vec2 tex>				\n"
-			"out vec2 TexCoords;														\n"
-			"																			\n"
-			"uniform mat4 projection;													\n"
-			"																			\n"
-			"void main()																\n"
-			"{																			\n"
-			"	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);					\n"
-			"	TexCoords = vertex.zw;													\n"
-			"}																			\n"
-			};
-
-			static const GLchar * fragment_shader_source[] = {
-			"#version 330 core															\n"
-			"in vec2 TexCoords;															\n"
-			"out vec4 color;															\n"
-			"																			\n"
-			"uniform sampler2D text;													\n"
-			"uniform vec4 textColor;													\n"
-			"																			\n"
-			"void main()																\n"
-			"{																			\n"
-			"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);			\n"
-			"	color = sampled * textColor;											\n"
-			"																			\n"
-			"}"
-			};
-
-
-			GLint success;
-
-			const GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
-			glShaderSource(vertex_shader, 1, vertex_shader_source, NULL);
-			glCompileShader(vertex_shader);
-
-			glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
-			if (!success)
-			{
-				NConsole::Println("ERROR::SHADER_COMPILATION_ERROR");
-			}
-
-			const GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
-			glShaderSource(fragment_shader, 1, fragment_shader_source, NULL);
-			glCompileShader(fragment_shader);
-
-			glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
-			if (!success)
-			{
-				NConsole::Println("ERROR::SHADER_COMPILATION_ERROR");
-			}
-
-			const GLuint program = glCreateProgram();
-			glAttachShader(program, vertex_shader);
-			glAttachShader(program, fragment_shader);
-			glLinkProgram(program);
-
-			glDeleteShader(vertex_shader);
-			glDeleteShader(fragment_shader);
-
-			return program;
-		}
 	}
 }
 
@@ -113,53 +52,12 @@ void NCanvas::InHookInitiate()
 	if (FT_Init_FreeType(&NText::ft))
 		NConsole::Println("ERROR::FREETYPE: Could not init FreeType Library");
 
-	if (FT_New_Face(NText::ft, (NGlobals::dll_folder_path + "fonts\\consolas.ttf").c_str(), 0, &NText::face))
-		NConsole::Println("ERROR::FREETYPE: Failed to load font");
+	NText::PreloadFont("consolas.ttf", 16);
 
-	FT_Set_Pixel_Sizes(NText::face, 0, 48);
-
-	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
-
-	for (GLubyte c = 0; c < 128; c++)
-	{
-		// Load character glyph 
-		if (FT_Load_Char(NText::face, c, FT_LOAD_RENDER))
-		{
-			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
-			continue;
-		}
-		// Generate texture
-		GLuint texture;
-		glGenTextures(1, &texture);
-		glBindTexture(GL_TEXTURE_2D, texture);
-		glTexImage2D(
-			GL_TEXTURE_2D,
-			0,
-			GL_RED,
-			NText::face->glyph->bitmap.width,
-			NText::face->glyph->bitmap.rows,
-			0,
-			GL_RED,
-			GL_UNSIGNED_BYTE,
-			NText::face->glyph->bitmap.buffer
-		);
-		// Set texture options
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
-		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
-		// Now store character for later use
-		NText::CCharacter character(texture,
-			UU::CVec2f(NText::face->glyph->bitmap.width, NText::face->glyph->bitmap.rows),
-			UU::CVec2f(NText::face->glyph->bitmap_left, NText::face->glyph->bitmap_top),
-			static_cast<float>(NText::face->glyph->advance.x));
-
-		NText::characters.insert(std::pair<GLchar, NText::CCharacter>(c, character));
-	}
 	glBindTexture(GL_TEXTURE_2D, 0);
 
-	FT_Done_Face(NText::face);
-	FT_Done_FreeType(NText::ft);
+	/*FT_Done_Face(NText::face);
+	FT_Done_FreeType(NText::ft);*/
 
 	glGenVertexArrays(1, &NText::VAO);
 	glGenBuffers(1, &NText::VBO);
@@ -231,6 +129,9 @@ void NCanvas::EndScene()
 
 	glEnable(GL_TEXTURE_2D);
 }
+
+void NCanvas::BeginText() {}
+void NCanvas::EndText() {}
 
 void NCanvas::Begin2D()
 {
@@ -385,8 +286,8 @@ void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU
 	glEnd();
 }
 
-void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, float size, UU::CColour colour)
-{
+void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, std::string font, uint_t size, UU::CColour colour)
+{	
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
 	glEnable(GL_DITHER);
@@ -394,8 +295,6 @@ void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, float size, UU:
 	glEnable(GL_LINE_SMOOTH);
 	glEnable(GL_POLYGON_SMOOTH);
 	glEnable(GL_MULTISAMPLE_ARB);
-
-	size /= 48.f;
 
 	static const glm::mat4 projection = glm::ortho(0.0f, NGlobals::GameResolution()[0], NGlobals::GameResolution()[1], 0.0f);
 	glUseProgram(NText::program);
@@ -408,20 +307,23 @@ void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, float size, UU:
 	//glActiveTexture(GL_TEXTURE0);
 	glBindVertexArray(NText::VAO);
 
-	// Iterate through all characters
-	std::string::const_iterator c;
-	for (c = text.begin(); c != text.end(); ++c)
-	{
-		NText::CCharacter ch = NText::characters[*c];
+	FT_Face current_font_face = NText::GetFontFace(font);
 
-		GLfloat xpos = position[0] + ch.bearing[0] * size;
-		GLfloat ypos = position[1] - ch.bearing[1] * size;
+	float scale = 1.f;
+
+	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
+	for (char32_t c : cvt.from_bytes(text))
+	{
+		NText::CCharacter ch = NText::GetCharacter(current_font_face, size, c);
+
+		GLfloat xpos = position[0] + ch.bearing[0];// *size* scale;
+		GLfloat ypos = position[1] - ch.bearing[1];// *size* scale;
 
 		if (xpos > NGlobals::GameResolution()[0])
 			break;
 
-		GLfloat w = ch.size[0] * size;
-		GLfloat h = ch.size[1] * size;
+		GLfloat w = ch.size[0];// *size* scale;
+		GLfloat h = ch.size[1];// *size* scale;
 
 		// Update VBO for each character
 		GLfloat vertices[6][4] = {
@@ -445,7 +347,7 @@ void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, float size, UU:
 		// Render quad
 		glDrawArrays(GL_TRIANGLES, 0, 6);
 		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		position[0] += (ch.advance / 64.f) * size; // Bitshift by 6 to get value in pixels (2^6 = 64)
+		position[0] += (ch.advance / 64.f);// *size; // Bitshift by 6 to get value in pixels (2^6 = 64)
 	}
 	glBindVertexArray(0);
 	glBindTexture(GL_TEXTURE_2D, 0);
@@ -613,4 +515,172 @@ void NCanvas::NDraw::OutlinedLine(UU::CVec3f position1, UU::CVec3f position2, UU
 	glVertex3f(position2[0], position2[1], position2[2]);
 
 	glEnd();
+}
+
+GLuint NCanvas::NText::CompileShaders()
+{
+	static const GLchar* vertex_shader_source[] = {
+	"#version 330 core															\n"
+	"layout(location = 0) in vec4 vertex; // <vec2 pos, vec2 tex>				\n"
+	"out vec2 TexCoords;														\n"
+	"																			\n"
+	"uniform mat4 projection;													\n"
+	"																			\n"
+	"void main()																\n"
+	"{																			\n"
+	"	gl_Position = projection * vec4(vertex.xy, 0.0, 1.0);					\n"
+	"	TexCoords = vertex.zw;													\n"
+	"}																			\n"
+	};
+
+	static const GLchar* fragment_shader_source[] = {
+	"#version 330 core															\n"
+	"in vec2 TexCoords;															\n"
+	"out vec4 color;															\n"
+	"																			\n"
+	"uniform sampler2D text;													\n"
+	"uniform vec4 textColor;													\n"
+	"																			\n"
+	"void main()																\n"
+	"{																			\n"
+	"	vec4 sampled = vec4(1.0, 1.0, 1.0, texture(text, TexCoords).r);			\n"
+	"	color = sampled * textColor;											\n"
+	"}"
+	};
+
+
+	GLint success;
+
+	const GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
+	glShaderSource(vertex_shader, 1, vertex_shader_source, NULL);
+	glCompileShader(vertex_shader);
+
+	glGetShaderiv(vertex_shader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		NConsole::Println("ERROR::SHADER_COMPILATION_ERROR");
+	}
+
+	const GLuint fragment_shader = glCreateShader(GL_FRAGMENT_SHADER);
+	glShaderSource(fragment_shader, 1, fragment_shader_source, NULL);
+	glCompileShader(fragment_shader);
+
+	glGetShaderiv(fragment_shader, GL_COMPILE_STATUS, &success);
+	if (!success)
+	{
+		NConsole::Println("ERROR::SHADER_COMPILATION_ERROR");
+	}
+
+	const GLuint program = glCreateProgram();
+	glAttachShader(program, vertex_shader);
+	glAttachShader(program, fragment_shader);
+	glLinkProgram(program);
+
+	glDeleteShader(vertex_shader);
+	glDeleteShader(fragment_shader);
+
+	return program;
+}
+
+FT_Face NCanvas::NText::GetFontFace(std::string font)
+{
+	if (!font_faces.contains(font))
+	{
+		if (FT_New_Face(ft, (NGlobals::dll_folder_path + "fonts\\" + font).c_str(), 0, &(font_faces[font])))
+			NConsole::Println("ERROR::FREETYPE: Failed to load font:" + font + "\n");
+	}
+
+	return font_faces[font];
+}
+
+NCanvas::NText::CCharacter& NCanvas::NText::GetCharacter(FT_Face face, uint_t size, char32_t c)
+{
+	if (characters.contains(std::tuple(face, size, c)))
+	{
+		return characters[std::tuple(face, size, c)];
+	}
+
+	FT_Set_Pixel_Sizes(face, 0, size);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
+	
+	if (FT_Load_Char(face, c, FT_LOAD_RENDER))
+	{
+		NConsole::Println("ERROR::FREETYTPE: Failed to load Glyph\n");
+	}
+	
+	// Generate texture
+	GLuint texture;
+	glGenTextures(1, &texture);
+	glBindTexture(GL_TEXTURE_2D, texture);
+	glTexImage2D(
+		GL_TEXTURE_2D,
+		0,
+		GL_RED,
+		face->glyph->bitmap.width,
+		face->glyph->bitmap.rows,
+		0,
+		GL_RED,
+		GL_UNSIGNED_BYTE,
+		face->glyph->bitmap.buffer
+	);
+	// Set texture options
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+	glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+	characters[std::tuple(face, size, c)]  = CCharacter(texture,
+		UU::CVec2ui(face->glyph->bitmap.width, face->glyph->bitmap.rows),
+		UU::CVec2i(face->glyph->bitmap_left, face->glyph->bitmap_top),
+		static_cast<float>(face->glyph->advance.x));
+
+	return characters[std::tuple(face, size, c)];
+}
+
+void NCanvas::NText::PreloadFont(std::string font, uint_t size)
+{
+	FT_Face current_font_face = GetFontFace(font);
+
+	FT_Set_Pixel_Sizes(current_font_face, 0, size);
+
+	glPixelStorei(GL_UNPACK_ALIGNMENT, 1); // Disable byte-alignment restriction
+
+	for (char32_t c = 0; c < 128; c++)
+	{
+		// Load character glyph 
+		if (FT_Load_Char(current_font_face, c, FT_LOAD_RENDER))
+		{
+			std::cout << "ERROR::FREETYTPE: Failed to load Glyph" << std::endl;
+			continue;
+		}
+		// Generate texture
+		GLuint texture;
+		glGenTextures(1, &texture);
+		glBindTexture(GL_TEXTURE_2D, texture);
+		glTexImage2D(
+			GL_TEXTURE_2D,
+			0,
+			GL_RED,
+			current_font_face->glyph->bitmap.width,
+			current_font_face->glyph->bitmap.rows,
+			0,
+			GL_RED,
+			GL_UNSIGNED_BYTE,
+			current_font_face->glyph->bitmap.buffer
+		);
+		// Set texture options
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_S, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_WRAP_T, GL_CLAMP_TO_EDGE);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MIN_FILTER, GL_LINEAR);
+		glTexParameteri(GL_TEXTURE_2D, GL_TEXTURE_MAG_FILTER, GL_LINEAR);
+
+		// Now store character for later use
+		CCharacter character(texture,
+			UU::CVec2ui(current_font_face->glyph->bitmap.width, current_font_face->glyph->bitmap.rows),
+			UU::CVec2i(current_font_face->glyph->bitmap_left, current_font_face->glyph->bitmap_top),
+			static_cast<float>(current_font_face->glyph->advance.x));
+
+		characters[std::tuple(current_font_face, size, c)] = character;
+	}
 }
