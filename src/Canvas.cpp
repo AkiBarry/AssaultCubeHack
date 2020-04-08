@@ -322,8 +322,8 @@ void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, std::string fon
 		if (xpos > NGlobals::GameResolution()[0])
 			break;
 
-		GLfloat w = ch.size[0];// *size* scale;
-		GLfloat h = ch.size[1];// *size* scale;
+		GLfloat w = static_cast<float>(ch.size[0]);// *size* scale;
+		GLfloat h = static_cast<float>(ch.size[1]);// *size* scale;
 
 		// Update VBO for each character
 		GLfloat vertices[6][4] = {
