@@ -44,7 +44,7 @@ void NCanvas::Terminate()
 }
 
 void NCanvas::InHookInitiate()
-{
+{	
 	glewInit();
 
 	NText::program = NText::CompileShaders();
@@ -52,7 +52,7 @@ void NCanvas::InHookInitiate()
 	if (FT_Init_FreeType(&NText::ft))
 		NConsole::Println("ERROR::FREETYPE: Could not init FreeType Library");
 
-	NText::PreloadFont("consolas.ttf", 16);
+	NText::PreloadFont("symbola.ttf", 16);
 
 	glBindTexture(GL_TEXTURE_2D, 0);
 
@@ -79,7 +79,7 @@ void NCanvas::BeginScene()
 		InHookInitiate();
 		first_time = false;
 	}
-
+	
 	glPushAttrib(GL_ALL_ATTRIB_BITS);
 
 	glDepthMask(GL_FALSE);
@@ -130,8 +130,35 @@ void NCanvas::EndScene()
 	glEnable(GL_TEXTURE_2D);
 }
 
-void NCanvas::BeginText() {}
-void NCanvas::EndText() {}
+void NCanvas::BeginText()
+{
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+
+	glEnable(GL_DITHER);
+	glEnable(GL_POINT_SMOOTH);
+	glEnable(GL_LINE_SMOOTH);
+	glEnable(GL_POLYGON_SMOOTH);
+	glEnable(GL_MULTISAMPLE_ARB);
+
+	static const glm::mat4 projection = glm::ortho(0.0f, NGlobals::GameResolution()[0], NGlobals::GameResolution()[1], 0.0f);
+	glUseProgram(NText::program);
+	glUniformMatrix4fv(glGetUniformLocation(NText::program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
+
+	glEnable(GL_TEXTURE_2D);
+	glEnable(GL_DITHER);
+}
+void NCanvas::EndText()
+{
+	glBindVertexArray(0);
+	glBindTexture(GL_TEXTURE_2D, 0);
+
+	glDisable(GL_DITHER);
+
+	glUseProgram(0);
+
+	glPopAttrib();
+
+}
 
 void NCanvas::Begin2D()
 {
@@ -166,16 +193,16 @@ void NCanvas::End3D()
 
 void NCanvas::NDraw::Rect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour)
 {
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
-
 	position -= UU::CVec2f(0.f, 1.f);
+	
+	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
 	glBegin(GL_QUADS);
 
-	glVertex2i(static_cast<GLint>(position[0]), static_cast<GLint>(position[1]));
-	glVertex2i(static_cast<GLint>(position[0] + size[0]), static_cast<GLint>(position[1]));
-	glVertex2i(static_cast<GLint>(position[0] + size[0]), static_cast<GLint>(position[1] + size[1]));
-	glVertex2i(static_cast<GLint>(position[0]), static_cast<GLint>(position[1] + size[1]));
+	glVertex2f(position[0], position[1]);
+	glVertex2f(position[0] + size[0], position[1]);
+	glVertex2f(position[0] + size[0], position[1] + size[1]);
+	glVertex2f(position[0], position[1] + size[1]);
 
 	glEnd();
 }
@@ -188,10 +215,10 @@ void NCanvas::NDraw::OutlinedRect(UU::CVec2f position, UU::CVec2f size, UU::CCol
 
 	glBegin(GL_LINE_LOOP);
 
-	glVertex2i(static_cast<GLint>(position[0]), static_cast<GLint>(position[1]));
-	glVertex2i(static_cast<GLint>(position[0] + size[0]), static_cast<GLint>(position[1]));
-	glVertex2i(static_cast<GLint>(position[0] + size[0]), static_cast<GLint>(position[1] + size[1]));
-	glVertex2i(static_cast<GLint>(position[0]), static_cast<GLint>(position[1] +size[1]));
+	glVertex2f(position[0], position[1]);
+	glVertex2f(position[0] + size[0], position[1]);
+	glVertex2f(position[0] + size[0], position[1] + size[1]);
+	glVertex2f(position[0], position[1] + size[1]);
 
 	glEnd();
 }
@@ -199,12 +226,12 @@ void NCanvas::NDraw::OutlinedRect(UU::CVec2f position, UU::CVec2f size, UU::CCol
 void NCanvas::NDraw::Circle(UU::CVec2f position, float radius, UU::CColour colour)
 {
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
-
+	
 	glBegin(GL_TRIANGLE_FAN);
 
 	for (float ang = 0; ang < 2.f * UU::FLT_PI; ang += 2.f * UU::FLT_PI / ( 2 * UU::FLT_PI * radius))
 	{
-		glVertex2i(static_cast<GLint>(position[0] + radius * UU::Cos(ang)), static_cast<GLint>(position[1] + radius * UU::Sin(ang)));
+		glVertex2f(position[0] + radius * UU::Cos(ang), position[1] + radius * UU::Sin(ang));
 	}
 
 	glEnd();
@@ -218,7 +245,7 @@ void NCanvas::NDraw::OutlinedCircle(UU::CVec2f position, float radius, UU::CColo
 
 	for (float ang = 0; ang < 2.f * UU::FLT_PI ; ang += 2.f * UU::FLT_PI / (2 * UU::FLT_PI * radius))
 	{
-		glVertex2i(static_cast<GLint>(position[0] + radius * UU::Cos(ang)), static_cast<GLint>(position[1] + radius * UU::Sin(ang)));
+		glVertex2f(position[0] + radius * UU::Cos(ang), position[1] + radius * UU::Sin(ang));
 	}
 
 	glEnd();
@@ -234,7 +261,7 @@ void NCanvas::NDraw::Poly(size_t num_points, UU::CVec2f * positions, UU::CColour
 	glBegin(GL_POLYGON);
 	{
 		for (size_t i = 0; i < num_points; ++i)
-			glVertex2i(static_cast<GLint>(positions[i][0]), static_cast<GLint>(positions[i][1]));
+			glVertex2f(positions[i][0], positions[i][1]);
 	}
 	glEnd();
 }
@@ -246,7 +273,7 @@ void NCanvas::NDraw::OutlinedPoly(size_t num_points, UU::CVec2f * positions, UU:
 	glBegin(GL_LINE_LOOP);
 	{
 		for (size_t i = 0; i < num_points; ++i)
-			glVertex2i(static_cast<GLint>(positions[i][0]), static_cast<GLint>(positions[i][1]));
+			glVertex2f(positions[i][0], positions[i][1]);
 	}
 	glEnd();
 }
@@ -257,8 +284,8 @@ void NCanvas::NDraw::Line(UU::CVec2f position1, UU::CVec2f position2, UU::CColou
 
 	glBegin(GL_LINES);
 
-	glVertex2i(static_cast<GLint>(position1[0]), static_cast<GLint>(position1[1]));
-	glVertex2i(static_cast<GLint>(position2[0]), static_cast<GLint>(position2[1]));
+	glVertex2f(position1[0], position1[1]);
+	glVertex2f(position2[0], position2[1]);
 
 	glEnd();
 }
@@ -287,76 +314,55 @@ void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU
 }
 
 void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, std::string font, uint_t size, UU::CColour colour)
-{	
-	glPushAttrib(GL_ALL_ATTRIB_BITS);
-
-	glEnable(GL_DITHER);
-	glEnable(GL_POINT_SMOOTH);
-	glEnable(GL_LINE_SMOOTH);
-	glEnable(GL_POLYGON_SMOOTH);
-	glEnable(GL_MULTISAMPLE_ARB);
-
-	static const glm::mat4 projection = glm::ortho(0.0f, NGlobals::GameResolution()[0], NGlobals::GameResolution()[1], 0.0f);
-	glUseProgram(NText::program);
-	glUniformMatrix4fv(glGetUniformLocation(NText::program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
-
-	glEnable(GL_TEXTURE_2D);
-	glEnable(GL_DITHER);
-
-	glUniform4f(glGetUniformLocation(NText::program, "textColor"), colour.r / 255.f, colour.g / 255.f, colour.b / 255.f, colour.a / 255.f);
-	//glActiveTexture(GL_TEXTURE0);
-	glBindVertexArray(NText::VAO);
-
-	FT_Face current_font_face = NText::GetFontFace(font);
-
-	float scale = 1.f;
-
-	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
-	for (char32_t c : cvt.from_bytes(text))
+{
+	BeginText();
 	{
-		NText::CCharacter ch = NText::GetCharacter(current_font_face, size, c);
+		glUniform4f(glGetUniformLocation(NText::program, "textColor"), colour.r / 255.f, colour.g / 255.f, colour.b / 255.f, colour.a / 255.f);
+		//glActiveTexture(GL_TEXTURE0);
+		glBindVertexArray(NText::VAO);
 
-		GLfloat xpos = position[0] + ch.bearing[0];// *size* scale;
-		GLfloat ypos = position[1] - ch.bearing[1];// *size* scale;
+		FT_Face current_font_face = NText::GetFontFace(font);
 
-		if (xpos > NGlobals::GameResolution()[0])
-			break;
+		std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
+		for (char32_t c : cvt.from_bytes(text))
+		{
+			NText::CCharacter ch = NText::GetCharacter(current_font_face, size, c);
 
-		GLfloat w = static_cast<float>(ch.size[0]);// *size* scale;
-		GLfloat h = static_cast<float>(ch.size[1]);// *size* scale;
+			GLfloat xpos = position[0] + ch.bearing[0];
+			GLfloat ypos = position[1] - ch.bearing[1];
 
-		// Update VBO for each character
-		GLfloat vertices[6][4] = {
-			{ xpos,     ypos,       0.0, 0.0 },
-			{ xpos + w, ypos + h,   1.0, 1.0 },
-			{ xpos,     ypos + h,   0.0, 1.0 },
+			if (xpos > NGlobals::GameResolution()[0])
+				break;
 
-			{ xpos,		ypos,       0.0, 0.0 },
-			{ xpos + w, ypos,       1.0, 0.0 },
-			{ xpos + w,	ypos + h,   1.0, 1.0 }
+			GLfloat w = static_cast<float>(ch.size[0]);
+			GLfloat h = static_cast<float>(ch.size[1]);
 
-		};
+			// Update VBO for each character
+			GLfloat vertices[6][4] = {
+				{ xpos,     ypos,       0.0, 0.0 },
+				{ xpos + w, ypos + h,   1.0, 1.0 },
+				{ xpos,     ypos + h,   0.0, 1.0 },
 
-		// Render glyph texture over quad
-		glBindTexture(GL_TEXTURE_2D, ch.texture_id);
-		// Update content of VBO memory
-		glBindBuffer(GL_ARRAY_BUFFER, NText::VBO);
-		glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
-		glBindBuffer(GL_ARRAY_BUFFER, 0);
+				{ xpos,		ypos,       0.0, 0.0 },
+				{ xpos + w, ypos,       1.0, 0.0 },
+				{ xpos + w,	ypos + h,   1.0, 1.0 }
 
-		// Render quad
-		glDrawArrays(GL_TRIANGLES, 0, 6);
-		// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
-		position[0] += (ch.advance / 64.f);// *size; // Bitshift by 6 to get value in pixels (2^6 = 64)
+			};
+
+			// Render glyph texture over quad
+			glBindTexture(GL_TEXTURE_2D, ch.texture_id);
+			// Update content of VBO memory
+			glBindBuffer(GL_ARRAY_BUFFER, NText::VBO);
+			glBufferSubData(GL_ARRAY_BUFFER, 0, sizeof(vertices), vertices);
+			glBindBuffer(GL_ARRAY_BUFFER, 0);
+
+			// Render quad
+			glDrawArrays(GL_TRIANGLES, 0, 6);
+			// Now advance cursors for next glyph (note that advance is number of 1/64 pixels)
+			position[0] += ch.advance / 64;// *size; // Bitshift by 6 to get value in pixels (2^6 = 64)
+		}
 	}
-	glBindVertexArray(0);
-	glBindTexture(GL_TEXTURE_2D, 0);
-
-	glDisable(GL_DITHER);
-
-	glUseProgram(0);
-
-	glPopAttrib();
+	EndText();
 }
 
 void NCanvas::NDraw::Cuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour colour)
@@ -633,7 +639,7 @@ NCanvas::NText::CCharacter& NCanvas::NText::GetCharacter(FT_Face face, uint_t si
 	characters[std::tuple(face, size, c)]  = CCharacter(texture,
 		UU::CVec2ui(face->glyph->bitmap.width, face->glyph->bitmap.rows),
 		UU::CVec2i(face->glyph->bitmap_left, face->glyph->bitmap_top),
-		static_cast<float>(face->glyph->advance.x));
+		face->glyph->advance.x);
 
 	return characters[std::tuple(face, size, c)];
 }
@@ -679,7 +685,7 @@ void NCanvas::NText::PreloadFont(std::string font, uint_t size)
 		CCharacter character(texture,
 			UU::CVec2ui(current_font_face->glyph->bitmap.width, current_font_face->glyph->bitmap.rows),
 			UU::CVec2i(current_font_face->glyph->bitmap_left, current_font_face->glyph->bitmap_top),
-			static_cast<float>(current_font_face->glyph->advance.x));
+			current_font_face->glyph->advance.x);
 
 		characters[std::tuple(current_font_face, size, c)] = character;
 	}

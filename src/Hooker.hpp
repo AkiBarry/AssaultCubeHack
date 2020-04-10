@@ -2,7 +2,6 @@
 #include <Windows.h>
 #include "Canvas.hpp"
 #include "Globals.hpp"
-#include <detours.h>
 #include <gl/GL.h>
 #include "Cheat.hpp"
 #include "MinHook.h"

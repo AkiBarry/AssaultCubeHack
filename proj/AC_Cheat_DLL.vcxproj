@@ -72,27 +72,27 @@
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
     <OutDir>..\bin\x86\$(Configuration)\</OutDir>
     <IntDir>..\obj\x86\$(Configuration)\</IntDir>
-    <IncludePath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\include;..\dep\detours\include;..\dep\freetype\include;..\dep\glew\include;..\dep\glm\include;..\dep\minhook\include;..\src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\lib\x86\Release;..\dep\detours\lib;..\dep\freetype\lib\x86;..\dep\glew\lib\x86;..\dep\minhook\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\include;..\dep\freetype\include;..\dep\glew\include;..\dep\glm\include;..\dep\minhook\include;..\src;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\lib\x86\Release;..\dep\freetype\lib\x86;..\dep\glew\lib\x86;..\dep\minhook\lib\x86;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|Win32'">
     <OutDir>..\bin\x86\$(Configuration)\</OutDir>
     <IntDir>..\obj\x86\$(Configuration)\</IntDir>
-    <IncludePath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\include;..\dep\detours\include;..\dep\freetype\include;..\dep\glew\include;..\dep\glm\include;..\dep\minhook\include;..\src;$(IncludePath)</IncludePath>
-    <LibraryPath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\lib\x86\Release;..\dep\detours\lib;..\dep\freetype\lib\x86;..\dep\glew\lib\x86;..\dep\minhook\lib\x86;$(LibraryPath)</LibraryPath>
+    <IncludePath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\include;..\dep\freetype\include;..\dep\glew\include;..\dep\glm\include;..\dep\minhook\include;..\src;$(IncludePath)</IncludePath>
+    <LibraryPath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\lib\x86\Release;..\dep\freetype\lib\x86;..\dep\glew\lib\x86;..\dep\minhook\lib\x86;$(LibraryPath)</LibraryPath>
     <ExecutablePath>$(ExecutablePath)</ExecutablePath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
     <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>..\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\include;..\dep\detours\include;..\dep\freetype\include;..\dep\glew\include;..\dep\glm\include;..\dep\minhook\include;..\src;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\include;..\dep\freetype\include;..\dep\glew\include;..\dep\glm\include;..\dep\minhook\include;..\src;$(IncludePath)</IncludePath>
     <LibraryPath>..\dep\minhook\lib\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <PropertyGroup Condition="'$(Configuration)|$(Platform)'=='Release|x64'">
     <OutDir>..\bin\$(Platform)\$(Configuration)\</OutDir>
     <IntDir>..\obj\$(Platform)\$(Configuration)\</IntDir>
-    <IncludePath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\include;..\dep\detours\include;..\dep\freetype\include;..\dep\glew\include;..\dep\glm\include;..\dep\minhook\include;..\src;$(IncludePath)</IncludePath>
+    <IncludePath>C:\Users\Snip\Documents\MEGA\Programming\C++\Libs\UsefulUtilities\include;..\dep\freetype\include;..\dep\glew\include;..\dep\glm\include;..\dep\minhook\include;..\src;$(IncludePath)</IncludePath>
     <LibraryPath>..\dep\minhook\lib\x64;$(VC_LibraryPath_x64);$(WindowsSDK_LibraryPath_x64);$(NETFXKitsDir)Lib\um\x64</LibraryPath>
   </PropertyGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|Win32'">
@@ -104,7 +104,7 @@
       <LanguageStandard>stdcpplatest</LanguageStandard>
     </ClCompile>
     <Link>
-      <AdditionalDependencies>libMinHook.x86.lib;detours.lib;UsefulUtilities.lib;opengl32.lib;glew32s.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMinHook.x86.lib;UsefulUtilities.lib;opengl32.lib;glew32s.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
     </Link>
   </ItemDefinitionGroup>
   <ItemDefinitionGroup Condition="'$(Configuration)|$(Platform)'=='Debug|x64'">
@@ -133,7 +133,7 @@
     <Link>
       <EnableCOMDATFolding>true</EnableCOMDATFolding>
       <OptimizeReferences>true</OptimizeReferences>
-      <AdditionalDependencies>libMinHook.x86.lib;detours.lib;UsefulUtilities.lib;opengl32.lib;glew32s.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
+      <AdditionalDependencies>libMinHook.x86.lib;UsefulUtilities.lib;opengl32.lib;glew32s.lib;freetype.lib;%(AdditionalDependencies)</AdditionalDependencies>
       <IgnoreAllDefaultLibraries>
       </IgnoreAllDefaultLibraries>
     </Link>

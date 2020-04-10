@@ -58,6 +58,12 @@ void NCheat::Aimbot()
 
 void NCheat::ESP()
 {
+	NCanvas::Begin2D();
+	NCanvas::NDraw::Circle({ 100.5f, 100.5f }, 50.f, UU::CColour::Red.WithAlpha(100));
+	NCanvas::NDraw::OutlinedCircle({ 100.5f, 100.5f }, 50.f, UU::CColour::Black.WithAlpha(100));
+	//NCanvas::NDraw::OutlinedRect({ 0.f, 0.f }, { NGlobals::GameResolution()[0] - 1, NGlobals::GameResolution()[1] - 1}, UU::CColour::Black);
+	NCanvas::End2D();
+	
 	if (NVars::esp_enabled)
 	{
 		if (reinterpret_cast<size_t>(NGlobals::GetEntityList()) >= NGlobals::game_base_address)
@@ -241,7 +247,7 @@ bool NCheat::Initiate()
 	//NMenuItems::main_window->Center();
 	NMenuItems::main_window->SetPosition(UU::CVec2f(300.f, 300.f));
 	NMenuItems::main_window->SetColour(UU::CColour(80, 180, 240));
-	NMenuItems::main_window->SetText("Inertia");
+	NMenuItems::main_window->SetText("Inertia -> >=");
 	NMenuItems::main_window->enabled = false;
 
 	/* Frames */

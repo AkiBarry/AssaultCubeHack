@@ -61,13 +61,13 @@ namespace NCanvas
 		public:
 			CCharacter() = default;
 
-			CCharacter(uint32_t _texture_id, UU::CVec2ui _size, UU::CVec2i _bearing, float _advance) 
+			CCharacter(uint32_t _texture_id, UU::CVec2ui _size, UU::CVec2i _bearing, long _advance) 
 				: texture_id(_texture_id), size(_size), bearing(_bearing), advance(_advance) {}
 
 			uint32_t					texture_id	= 0;					// ID handle of the glyph texture
 			UU::CVec2ui					size		= UU::CVec2ui(0, 0);	// Size of glyph
 			UU::CVec2i					bearing		= UU::CVec2i(0, 0);	// Offset from baseline to left/top of glyph
-			float						advance		= 0;					// Offset to advance to next glyph
+			long						advance		= 0;					// Offset to advance to next glyph
 		};
 
 		GLuint CompileShaders();
@@ -76,7 +76,7 @@ namespace NCanvas
 		CCharacter& GetCharacter(FT_Face face, uint_t size, char32_t c);
 
 		void PreloadFont(std::string font, uint_t size);
-
+		
 		extern FT_Library ft;
 		extern std::map<std::string, FT_Face> font_faces;
 		extern GLuint VAO, VBO;

@@ -1,5 +1,4 @@
 #include "Memory.hpp"
-#include <detours.h>
 #include <Windows.h>
 #include "Console.hpp"
 #include <vector>
