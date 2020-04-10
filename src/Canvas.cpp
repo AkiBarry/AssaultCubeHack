@@ -140,13 +140,14 @@ void NCanvas::BeginText()
 	glEnable(GL_POLYGON_SMOOTH);
 	glEnable(GL_MULTISAMPLE_ARB);
 
-	static const glm::mat4 projection = glm::ortho(0.0f, NGlobals::GameResolution()[0], NGlobals::GameResolution()[1], 0.0f);
+	static const glm::mat4 projection = glm::ortho(0.f, NGlobals::GameResolution()[0], NGlobals::GameResolution()[1], 0.f);
 	glUseProgram(NText::program);
 	glUniformMatrix4fv(glGetUniformLocation(NText::program, "projection"), 1, GL_FALSE, glm::value_ptr(projection));
 
 	glEnable(GL_TEXTURE_2D);
 	glEnable(GL_DITHER);
 }
+
 void NCanvas::EndText()
 {
 	glBindVertexArray(0);
@@ -157,7 +158,6 @@ void NCanvas::EndText()
 	glUseProgram(0);
 
 	glPopAttrib();
-
 }
 
 void NCanvas::Begin2D()
@@ -315,6 +315,9 @@ void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU
 
 void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, std::string font, uint_t size, UU::CColour colour)
 {
+	position[0] = UU::Round(position[0]);
+	position[1] = UU::Round(position[1]);
+	
 	BeginText();
 	{
 		glUniform4f(glGetUniformLocation(NText::program, "textColor"), colour.r / 255.f, colour.g / 255.f, colour.b / 255.f, colour.a / 255.f);
@@ -646,7 +649,7 @@ NCanvas::NText::CCharacter& NCanvas::NText::GetCharacter(FT_Face face, uint_t si
 long NCanvas::NText::MeasureString(std::string text, std::string font, uint_t size)
 {
 	long width = 0;
-
+	
 	const FT_Face current_font_face = GetFontFace(font);
 
 	// ReSharper disable twice CppDeprecatedEntity
@@ -657,7 +660,7 @@ long NCanvas::NText::MeasureString(std::string text, std::string font, uint_t si
 
 		width += ch.advance / 64;
 	}
-
+	
 	return width;
 }
 

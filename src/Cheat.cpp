@@ -59,9 +59,13 @@ void NCheat::Aimbot()
 void NCheat::ESP()
 {
 	NCanvas::Begin2D();
-	NCanvas::NDraw::Circle({ 100.5f, 100.5f }, 50.f, UU::CColour::Red.WithAlpha(100));
-	NCanvas::NDraw::OutlinedCircle({ 100.5f, 100.5f }, 50.f, UU::CColour::Black.WithAlpha(100));
-	//NCanvas::NDraw::OutlinedRect({ 0.f, 0.f }, { NGlobals::GameResolution()[0] - 1, NGlobals::GameResolution()[1] - 1}, UU::CColour::Black);
+	UU::CVec2f mid = NGlobals::GameResolution() / 2.f - UU::CVec2f(0.5f, 0.5f);
+	
+	NCanvas::NDraw::Rect(mid - UU::CVec2f(100.f, 8.f), UU::CVec2f(200.f, 16.f), UU::CColour::White);
+	
+	long val = NCanvas::NText::MeasureString("Centered Text Test wgwpww", "symbola.ttf", 16);
+	
+	NCanvas::NDraw::Text("Centered Text Test wwww", mid - UU::CVec2f(val / 2.f, 0.f), "symbola.ttf", 16, UU::CColour::Blue);
 	NCanvas::End2D();
 	
 	if (NVars::esp_enabled)

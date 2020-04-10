@@ -66,28 +66,6 @@ void NMenu::UpdateAndDrawAll()
 {
 	UpdateAll();
 	DrawAll();
-	/*for (CBaseElement * i : scene)
-	{
-		if (!i->enabled)
-			continue;
-
-		if (i->active && i->drawn)
-		{
-			i->UpdateWrap();
-			i->DrawWrap();
-			i->UpdateAndDrawChildren();
-		}
-		else if (i->active)
-		{
-			i->UpdateWrap();
-			i->UpdateChildren();
-		}
-		else if (i->drawn)
-		{
-			i->DrawWrap();
-			i->DrawChildren();
-		}
-	}*/
 }
 
 void NMenu::CBaseElement::UpdateWrap()
