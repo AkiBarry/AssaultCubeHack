@@ -554,7 +554,6 @@ GLuint NCanvas::NText::CompileShaders()
 	"}"
 	};
 
-
 	GLint success;
 
 	const GLuint vertex_shader = glCreateShader(GL_VERTEX_SHADER);
@@ -642,6 +641,24 @@ NCanvas::NText::CCharacter& NCanvas::NText::GetCharacter(FT_Face face, uint_t si
 		face->glyph->advance.x);
 
 	return characters[std::tuple(face, size, c)];
+}
+
+long NCanvas::NText::MeasureString(std::string text, std::string font, uint_t size)
+{
+	long width = 0;
+
+	const FT_Face current_font_face = GetFontFace(font);
+
+	// ReSharper disable twice CppDeprecatedEntity
+	std::wstring_convert<std::codecvt_utf8<char32_t>, char32_t> cvt;
+	for (char32_t c : cvt.from_bytes(text))
+	{
+		CCharacter ch = GetCharacter(current_font_face, size, c);
+
+		width += ch.advance / 64;
+	}
+
+	return width;
 }
 
 void NCanvas::NText::PreloadFont(std::string font, uint_t size)
