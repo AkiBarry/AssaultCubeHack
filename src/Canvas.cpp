@@ -646,9 +646,9 @@ NCanvas::NText::CCharacter& NCanvas::NText::GetCharacter(FT_Face face, uint_t si
 	return characters[std::tuple(face, size, c)];
 }
 
-long NCanvas::NText::MeasureString(std::string text, std::string font, uint_t size)
+UU::CVec2l NCanvas::NText::MeasureString(std::string text, std::string font, uint_t size)
 {
-	long width = 0;
+	UU::CVec2l result = {0, 0};
 	
 	const FT_Face current_font_face = GetFontFace(font);
 
@@ -658,10 +658,11 @@ long NCanvas::NText::MeasureString(std::string text, std::string font, uint_t si
 	{
 		CCharacter ch = GetCharacter(current_font_face, size, c);
 
-		width += ch.advance / 64;
+		result[0] += ch.advance / 64;
+		result[1] = UU::Max(ch.size[1], static_cast<uint_t>(result[1]));
 	}
 	
-	return width;
+	return result;
 }
 
 void NCanvas::NText::PreloadFont(std::string font, uint_t size)

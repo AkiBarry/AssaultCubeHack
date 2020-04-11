@@ -58,15 +58,18 @@ void NCheat::Aimbot()
 
 void NCheat::ESP()
 {
-	NCanvas::Begin2D();
+	/*NCanvas::Begin2D();
 	UU::CVec2f mid = NGlobals::GameResolution() / 2.f - UU::CVec2f(0.5f, 0.5f);
 	
-	NCanvas::NDraw::Rect(mid - UU::CVec2f(100.f, 8.f), UU::CVec2f(200.f, 16.f), UU::CColour::White);
+	NCanvas::NDraw::Rect(mid - UU::CVec2f(100.f, 10.f), UU::CVec2f(200.f, 20.f), UU::CColour::White);
 	
-	long val = NCanvas::NText::MeasureString("Centered Text Test wgwpww", "symbola.ttf", 16);
+	UU::CVec2l res = NCanvas::NText::MeasureString("Centered Text Test wgwpww", "symbola.ttf", 16);
 	
-	NCanvas::NDraw::Text("Centered Text Test wwww", mid - UU::CVec2f(val / 2.f, 0.f), "symbola.ttf", 16, UU::CColour::Blue);
-	NCanvas::End2D();
+	NCanvas::NDraw::Text("Centered Text Test wgwpww", mid - UU::CVec2f(res[0] / 2.f, -res[1] / 2.f), "symbola.ttf", 16, UU::CColour::Blue);
+	NCanvas::NDraw::Text("Centered Text Test wgwpww", mid - UU::CVec2f(res[0] / 2.f, 0.f), "symbola.ttf", 16, UU::CColour::Black);
+
+	NConsole::Println(res);
+	NCanvas::End2D();*/
 	
 	if (NVars::esp_enabled)
 	{

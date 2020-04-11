@@ -75,7 +75,7 @@ namespace NCanvas
 		FT_Face GetFontFace(std::string font);
 		CCharacter& GetCharacter(FT_Face face, uint_t size, char32_t c);
 
-		long MeasureString(std::string text, std::string font, uint_t size);
+		UU::CVec2l MeasureString(std::string text, std::string font, uint_t size);
 
 		void PreloadFont(std::string font, uint_t size);
 		
