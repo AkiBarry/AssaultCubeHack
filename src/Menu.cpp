@@ -387,7 +387,8 @@ void NMenu::CColoured::SetOutlineColour(UU::CHSB && val)
 
 void NMenu::CText::Draw()
 {
-	NCanvas::NDraw::Text(text, abs_position, "consolas.ttf", 16, UU::CColour(0, 0, 0));
+	NCanvas::SetColour(UU::CColour::Black);
+	NCanvas::NDraw::Text(text, abs_position, "consolas.ttf", 16);
 }
 
 std::string NMenu::CText::GetFont() const
@@ -452,8 +453,10 @@ void NMenu::CWindow::Update()
 
 void NMenu::CWindow::Draw()
 {
-	NCanvas::NDraw::Rect(boundary_min + UU::CVec2f(1.f, 1.f), boundary_max - boundary_min - UU::CVec2f(2.f, 2.f), col);
-	NCanvas::NDraw::OutlinedRect(boundary_min, boundary_max - boundary_min, outline_col);
+	NCanvas::SetColour(col);
+	NCanvas::NDraw::Rect(boundary_min + UU::CVec2f(1.f, 1.f), boundary_max - boundary_min - UU::CVec2f(2.f, 2.f));
+	NCanvas::SetColour(outline_col);
+	NCanvas::NDraw::OutlinedRect(boundary_min, boundary_max - boundary_min);
 }
 
 void NMenu::CWindow::SetPosition(UU::CVec2f && val)
@@ -542,9 +545,10 @@ void NMenu::CFrame::Draw()
 {
 	if (!drawn)
 		return;
-
-	NCanvas::NDraw::Rect(abs_position, size, col);
-	NCanvas::NDraw::OutlinedRect(abs_position, size, outline_col);
+	NCanvas::SetColour(col);
+	NCanvas::NDraw::Rect(abs_position, size);
+	NCanvas::SetColour(outline_col);
+	NCanvas::NDraw::OutlinedRect(abs_position, size);
 }
 
 NMenu::CCheckBox::CCheckBox()
@@ -585,22 +589,29 @@ void NMenu::CCheckBox::Draw()
 
 	if (is_clicked)
 	{
-		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(1.f, 1.f), size - UU::CVec2f(2.f, 2.f), UU::CColour(200, 200, 200));
+		NCanvas::SetColour(UU::CColour(200,200,200));
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(1.f, 1.f), size - UU::CVec2f(2.f, 2.f));
 	}
 	else if (mouse_position.WithinAABox(boundary_min, boundary_max))
 	{
-		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(1.f, 1.f), size - UU::CVec2f(2.f, 2.f), UU::CColour(255, 255, 255));
-		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(2.f, 2.f), size - UU::CVec2f(4.f, 4.f), UU::CColour(200, 200, 200));
+		NCanvas::SetColour(UU::CColour::White);
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(1.f, 1.f), size - UU::CVec2f(2.f, 2.f));
+		NCanvas::SetColour(UU::CColour(200, 200, 200));
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(2.f, 2.f), size - UU::CVec2f(4.f, 4.f));
 	}
 	else
 	{
-		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(1.f, 1.f), size - UU::CVec2f(2.f, 2.f), UU::CColour(255, 255, 255));
+		NCanvas::SetColour(UU::CColour::White);
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(1.f, 1.f), size - UU::CVec2f(2.f, 2.f));
 	}
 
-	if (GetVal())
-		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(2.f, 2.f), size - UU::CVec2f(4.f, 4.f), col);
+	if (GetVal()) {
+		NCanvas::SetColour(col);
+		NCanvas::NDraw::Rect(abs_position + UU::CVec2f(2.f, 2.f), size - UU::CVec2f(4.f, 4.f));
+	}
 
-	NCanvas::NDraw::OutlinedRect(abs_position, size, outline_col);
+	NCanvas::SetColour(outline_col);
+	NCanvas::NDraw::OutlinedRect(abs_position, size);
 }
 
 void NMenu::CCheckBox::SetSize(UU::CVec2f && val)
@@ -703,18 +714,22 @@ void NMenu::CButton::Draw()
 
 	if (is_clicked)
 	{
-		NCanvas::NDraw::Rect(abs_position, size, clicked_col);
+		NCanvas::SetColour(clicked_col);
+		NCanvas::NDraw::Rect(abs_position, size);
 	}
 	else if (mouse_position.WithinAABox(boundary_min, boundary_max))
 	{
-		NCanvas::NDraw::Rect(abs_position, size, hover_col);
+		NCanvas::SetColour(hover_col);
+		NCanvas::NDraw::Rect(abs_position, size);
 	}
 	else
 	{
-		NCanvas::NDraw::Rect(abs_position, size, col);
+		NCanvas::SetColour(col);
+		NCanvas::NDraw::Rect(abs_position, size);
 	}
 
-	NCanvas::NDraw::OutlinedRect(abs_position, size, outline_col);
+	NCanvas::SetColour(outline_col);
+	NCanvas::NDraw::OutlinedRect(abs_position, size);
 }
 
 void NMenu::CButton::SetColour(UU::CColour && val)

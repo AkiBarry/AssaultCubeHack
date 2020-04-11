@@ -415,17 +415,17 @@ void NMenu::CSlider<T>::Draw()
 	auto mouse_position = NInput::GetMousePos();
 	float slider_pos = size[0] * (float)(var->GetVal() - min) / (float)(max - min);
 
+
+	NCanvas::SetColour(UU::CColour::Black);
 	NCanvas::NDraw::Line(
 		abs_position + UU::CVec2f(0.f, size[1] / 2.f),
-		abs_position + UU::CVec2f(size[0], size[1] / 2.f),
-		UU::CColour::Black);
+		abs_position + UU::CVec2f(size[0], size[1] / 2.f));
 
 	if (is_dragged)
 	{
 		NCanvas::NDraw::Rect(
 			abs_position + UU::CVec2f(slider_pos - slider_width / 2.f, 0.f), 
-			UU::CVec2f(slider_width, size[1]),
-			dragged_col);
+			UU::CVec2f(slider_width, size[1]));
 	}
 	else
 	{
@@ -436,27 +436,25 @@ void NMenu::CSlider<T>::Draw()
 		{
 			NCanvas::NDraw::Rect(
 				abs_position + UU::CVec2f(slider_pos - slider_width / 2.f, 0.f), 
-				UU::CVec2f(slider_width, size[1]),
-				hover_col);
+				UU::CVec2f(slider_width, size[1]));
 		}
 		else
 		{
 			NCanvas::NDraw::Rect(
 				abs_position + UU::CVec2f(slider_pos - slider_width / 2.f, 0.f), 
-				UU::CVec2f(slider_width, size[1]),
-				col);
+				UU::CVec2f(slider_width, size[1]));
 		}
 	}
 
 	NCanvas::NDraw::OutlinedRect(
 		abs_position + UU::CVec2f(slider_pos - slider_width / 2.f, 0.f), 
-		UU::CVec2f(slider_width, size[1]),
-		outline_col);
+		UU::CVec2f(slider_width, size[1]));
 
 	std::ostringstream out;
 	out << GetVal();
 
-	NCanvas::NDraw::Text(out.str(), abs_position + size, "consolas.ttf", 16, UU::CColour::Black);
+	NCanvas::SetColour(UU::CColour::Black);
+	NCanvas::NDraw::Text(out.str(), abs_position + size, "consolas.ttf", 16);
 }
 
 template<typename T>

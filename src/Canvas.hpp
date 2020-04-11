@@ -31,27 +31,31 @@ namespace NCanvas
 	void Begin3D();
 	void End3D();
 
+	// Colour
+	void SetColour(UU::CColour colour);
+	UU::CColour& GetColour();
+
 	namespace NDraw
-	{	
+	{
 		//2D
 
-		void Rect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour);
-		void OutlinedRect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour);
-		void Circle(UU::CVec2f position, float radius, UU::CColour colour);
-		void OutlinedCircle(UU::CVec2f position, float radius, UU::CColour colour);
-		void Poly(size_t num_points, UU::CVec2f *  positions, UU::CColour colour);
-		void OutlinedPoly(size_t num_points, UU::CVec2f *  positions, UU::CColour colour);
-		void Line(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour);
-		void OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour);
-		void Text(std::string text, UU::CVec2f position, std::string font, uint_t size, UU::CColour colour);
+		void Rect(UU::CVec2f position, UU::CVec2f size);
+		void OutlinedRect(UU::CVec2f position, UU::CVec2f size);
+		void Circle(UU::CVec2f position, float radius);
+		void OutlinedCircle(UU::CVec2f position, float radius);
+		void Poly(size_t num_points, UU::CVec2f *  positions);
+		void OutlinedPoly(size_t num_points, UU::CVec2f *  positions);
+		void Line(UU::CVec2f position1, UU::CVec2f position2);
+		void OutlinedLine(UU::CVec2f position1, UU::CVec2f position2);
+		void Text(std::string text, UU::CVec2f position, std::string font, uint_t size);
 
 		// 3D
 
-		void Cuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour colour);
-		void OutlinedCuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour colour);
+		void Cuboid(UU::CVec3f position, UU::CVec3f size);
+		void OutlinedCuboid(UU::CVec3f position, UU::CVec3f size);
 		
-		void Line(UU::CVec3f position1, UU::CVec3f position2, UU::CColour colour);
-		void OutlinedLine(UU::CVec3f position1, UU::CVec3f position2, UU::CColour colour);
+		void Line(UU::CVec3f position1, UU::CVec3f position2);
+		void OutlinedLine(UU::CVec3f position1, UU::CVec3f position2);
 	}
 
 	namespace NText

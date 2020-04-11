@@ -191,12 +191,26 @@ void NCanvas::End3D()
 	}
 }
 
-void NCanvas::NDraw::Rect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour)
+namespace
+{
+	UU::CColour brush_colour = UU::CColour::Black;
+}
+
+void NCanvas::SetColour(UU::CColour colour)
+{
+	brush_colour = colour;
+	glColor4ub(colour.r, colour.g, colour.b, colour.a);
+}
+
+UU::CColour & NCanvas::GetColour()
+{
+	return brush_colour;
+}
+
+void NCanvas::NDraw::Rect(UU::CVec2f position, UU::CVec2f size)
 {
 	position -= UU::CVec2f(0.f, 1.f);
 	
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
-
 	glBegin(GL_QUADS);
 
 	glVertex2f(position[0], position[1]);
@@ -207,11 +221,9 @@ void NCanvas::NDraw::Rect(UU::CVec2f position, UU::CVec2f size, UU::CColour colo
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedRect(UU::CVec2f position, UU::CVec2f size, UU::CColour colour)
+void NCanvas::NDraw::OutlinedRect(UU::CVec2f position, UU::CVec2f size)
 {
 	size -= UU::CVec2f(1.f, 1.f);
-
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
 	glBegin(GL_LINE_LOOP);
 
@@ -223,10 +235,8 @@ void NCanvas::NDraw::OutlinedRect(UU::CVec2f position, UU::CVec2f size, UU::CCol
 	glEnd();
 }
 
-void NCanvas::NDraw::Circle(UU::CVec2f position, float radius, UU::CColour colour)
+void NCanvas::NDraw::Circle(UU::CVec2f position, float radius)
 {
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
-	
 	glBegin(GL_TRIANGLE_FAN);
 
 	for (float ang = 0; ang < 2.f * UU::FLT_PI; ang += 2.f * UU::FLT_PI / ( 2 * UU::FLT_PI * radius))
@@ -237,10 +247,8 @@ void NCanvas::NDraw::Circle(UU::CVec2f position, float radius, UU::CColour colou
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedCircle(UU::CVec2f position, float radius, UU::CColour colour)
+void NCanvas::NDraw::OutlinedCircle(UU::CVec2f position, float radius)
 {
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
-
 	glBegin(GL_LINE_LOOP);
 
 	for (float ang = 0; ang < 2.f * UU::FLT_PI ; ang += 2.f * UU::FLT_PI / (2 * UU::FLT_PI * radius))
@@ -251,12 +259,10 @@ void NCanvas::NDraw::OutlinedCircle(UU::CVec2f position, float radius, UU::CColo
 	glEnd();
 }
 
-void NCanvas::NDraw::Poly(size_t num_points, UU::CVec2f * positions, UU::CColour colour)
+void NCanvas::NDraw::Poly(size_t num_points, UU::CVec2f * positions)
 {
 	if (num_points < 3)
 		return;
-
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
 	glBegin(GL_POLYGON);
 	{
@@ -266,10 +272,8 @@ void NCanvas::NDraw::Poly(size_t num_points, UU::CVec2f * positions, UU::CColour
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedPoly(size_t num_points, UU::CVec2f * positions, UU::CColour colour)
+void NCanvas::NDraw::OutlinedPoly(size_t num_points, UU::CVec2f * positions)
 {
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
-
 	glBegin(GL_LINE_LOOP);
 	{
 		for (size_t i = 0; i < num_points; ++i)
@@ -278,10 +282,8 @@ void NCanvas::NDraw::OutlinedPoly(size_t num_points, UU::CVec2f * positions, UU:
 	glEnd();
 }
 
-void NCanvas::NDraw::Line(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour)
+void NCanvas::NDraw::Line(UU::CVec2f position1, UU::CVec2f position2)
 {
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
-
 	glBegin(GL_LINES);
 
 	glVertex2f(position1[0], position1[1]);
@@ -290,10 +292,10 @@ void NCanvas::NDraw::Line(UU::CVec2f position1, UU::CVec2f position2, UU::CColou
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU::CColour colour)
+void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2)
 {
 	glLineWidth(3.f);
-	glColor4ub(0, 0, 0, colour.a);
+	glColor4ub(0, 0, 0, GetColour().a);
 
 	glBegin(GL_LINES);
 
@@ -303,7 +305,8 @@ void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU
 	glEnd();
 
 	glLineWidth(1.f);
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
+
+	SetColour(GetColour());
 
 	glBegin(GL_LINES);
 
@@ -313,14 +316,17 @@ void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2, UU
 	glEnd();
 }
 
-void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, std::string font, uint_t size, UU::CColour colour)
+void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, std::string font, uint_t size)
 {
 	position[0] = UU::Round(position[0]);
 	position[1] = UU::Round(position[1]);
+
+	UU::CColour colour = GetColour();
 	
 	BeginText();
 	{
-		glUniform4f(glGetUniformLocation(NText::program, "textColor"), colour.r / 255.f, colour.g / 255.f, colour.b / 255.f, colour.a / 255.f);
+		glUniform4f(glGetUniformLocation(NText::program, "textColor"), colour.r / 255.f, colour.g / 255.f,
+		            colour.b / 255.f, colour.a / 255.f);
 		//glActiveTexture(GL_TEXTURE0);
 		glBindVertexArray(NText::VAO);
 
@@ -368,10 +374,9 @@ void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, std::string fon
 	EndText();
 }
 
-void NCanvas::NDraw::Cuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour colour)
+void NCanvas::NDraw::Cuboid(UU::CVec3f position, UU::CVec3f size)
 {
 	glLineWidth(1.f);
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
 	auto temp = position - UU::CVec3f(size[0] / 2.f, size[1] / 2.f, 0.f);
 
@@ -441,10 +446,9 @@ void NCanvas::NDraw::Cuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour co
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedCuboid(UU::CVec3f position, UU::CVec3f size, UU::CColour colour)
+void NCanvas::NDraw::OutlinedCuboid(UU::CVec3f position, UU::CVec3f size)
 {
 	glLineWidth(1.f);
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
 	const auto temp = position - UU::CVec3f(size[0] / 2.f, size[1] / 2.f, 0.f);
 
@@ -490,11 +494,10 @@ void NCanvas::NDraw::OutlinedCuboid(UU::CVec3f position, UU::CVec3f size, UU::CC
 	glEnd();
 }
 
-void NCanvas::NDraw::Line(UU::CVec3f position1, UU::CVec3f position2, UU::CColour colour)
+void NCanvas::NDraw::Line(UU::CVec3f position1, UU::CVec3f position2)
 {
 	glLineWidth(1.f);
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
-
+	
 	glBegin(GL_LINES);
 
 	glVertex3f(position1[0], position1[1], position1[2]);
@@ -503,10 +506,10 @@ void NCanvas::NDraw::Line(UU::CVec3f position1, UU::CVec3f position2, UU::CColou
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedLine(UU::CVec3f position1, UU::CVec3f position2, UU::CColour colour)
+void NCanvas::NDraw::OutlinedLine(UU::CVec3f position1, UU::CVec3f position2)
 {
 	glLineWidth(3.f);
-	glColor4ub(0, 0, 0, 255);
+	glColor4ub(0, 0, 0, GetColour().a);
 
 	glBegin(GL_LINES);
 
@@ -516,8 +519,9 @@ void NCanvas::NDraw::OutlinedLine(UU::CVec3f position1, UU::CVec3f position2, UU
 	glEnd();
 
 	glLineWidth(1.f);
-	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 
+	SetColour(GetColour());
+	
 	glBegin(GL_LINES);
 
 	glVertex3f(position1[0], position1[1], position1[2]);
