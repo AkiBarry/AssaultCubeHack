@@ -191,23 +191,35 @@ void NCanvas::End3D()
 	}
 }
 
+float NCanvas::GetDPI()
+{
+	SetProcessDPIAware(); //true
+	
+	HDC screen = GetDC(NULL);
+	const float hPixelsPerInch = static_cast<float>(GetDeviceCaps(screen, LOGPIXELSX));
+	const float vPixelsPerInch = static_cast<float>(GetDeviceCaps(screen, LOGPIXELSY));
+	ReleaseDC(NULL, screen);
+	
+	return (hPixelsPerInch + vPixelsPerInch) * 0.5f;
+}
+
 namespace
 {
 	UU::CColour brush_colour = UU::CColour::Black;
 }
 
-void NCanvas::SetColour(UU::CColour colour)
+void NCanvas::Draw::SetColour(UU::CColour colour)
 {
 	brush_colour = colour;
 	glColor4ub(colour.r, colour.g, colour.b, colour.a);
 }
 
-UU::CColour & NCanvas::GetColour()
+UU::CColour & NCanvas::Draw::GetColour()
 {
 	return brush_colour;
 }
 
-void NCanvas::NDraw::Rect(UU::CVec2f position, UU::CVec2f size)
+void NCanvas::Draw::FilledRect(UU::CVec2f position, UU::CVec2f size)
 {
 	position -= UU::CVec2f(0.f, 1.f);
 	
@@ -221,7 +233,7 @@ void NCanvas::NDraw::Rect(UU::CVec2f position, UU::CVec2f size)
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedRect(UU::CVec2f position, UU::CVec2f size)
+void NCanvas::Draw::OutlinedRect(UU::CVec2f position, UU::CVec2f size)
 {
 	size -= UU::CVec2f(1.f, 1.f);
 
@@ -235,7 +247,7 @@ void NCanvas::NDraw::OutlinedRect(UU::CVec2f position, UU::CVec2f size)
 	glEnd();
 }
 
-void NCanvas::NDraw::Circle(UU::CVec2f position, float radius)
+void NCanvas::Draw::FilledCircle(UU::CVec2f position, float radius)
 {
 	glBegin(GL_TRIANGLE_FAN);
 
@@ -247,7 +259,7 @@ void NCanvas::NDraw::Circle(UU::CVec2f position, float radius)
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedCircle(UU::CVec2f position, float radius)
+void NCanvas::Draw::OutlinedCircle(UU::CVec2f position, float radius)
 {
 	glBegin(GL_LINE_LOOP);
 
@@ -259,7 +271,7 @@ void NCanvas::NDraw::OutlinedCircle(UU::CVec2f position, float radius)
 	glEnd();
 }
 
-void NCanvas::NDraw::Poly(size_t num_points, UU::CVec2f * positions)
+void NCanvas::Draw::FilledPoly(size_t num_points, UU::CVec2f * positions)
 {
 	if (num_points < 3)
 		return;
@@ -272,7 +284,7 @@ void NCanvas::NDraw::Poly(size_t num_points, UU::CVec2f * positions)
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedPoly(size_t num_points, UU::CVec2f * positions)
+void NCanvas::Draw::OutlinedPoly(size_t num_points, UU::CVec2f * positions)
 {
 	glBegin(GL_LINE_LOOP);
 	{
@@ -282,7 +294,7 @@ void NCanvas::NDraw::OutlinedPoly(size_t num_points, UU::CVec2f * positions)
 	glEnd();
 }
 
-void NCanvas::NDraw::Line(UU::CVec2f position1, UU::CVec2f position2)
+void NCanvas::Draw::Line(UU::CVec2f position1, UU::CVec2f position2)
 {
 	glBegin(GL_LINES);
 
@@ -292,7 +304,7 @@ void NCanvas::NDraw::Line(UU::CVec2f position1, UU::CVec2f position2)
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2)
+void NCanvas::Draw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2)
 {
 	glLineWidth(3.f);
 	glColor4ub(0, 0, 0, GetColour().a);
@@ -316,7 +328,7 @@ void NCanvas::NDraw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2)
 	glEnd();
 }
 
-void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, std::string font, uint_t size)
+void NCanvas::Draw::Text(std::string text, UU::CVec2f position, std::string font, uint_t size)
 {
 	position[0] = UU::Round(position[0]);
 	position[1] = UU::Round(position[1]);
@@ -374,7 +386,7 @@ void NCanvas::NDraw::Text(std::string text, UU::CVec2f position, std::string fon
 	EndText();
 }
 
-void NCanvas::NDraw::Cuboid(UU::CVec3f position, UU::CVec3f size)
+void NCanvas::Draw::FilledCuboid(UU::CVec3f position, UU::CVec3f size)
 {
 	glLineWidth(1.f);
 
@@ -446,7 +458,7 @@ void NCanvas::NDraw::Cuboid(UU::CVec3f position, UU::CVec3f size)
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedCuboid(UU::CVec3f position, UU::CVec3f size)
+void NCanvas::Draw::OutlinedCuboid(UU::CVec3f position, UU::CVec3f size)
 {
 	glLineWidth(1.f);
 
@@ -494,7 +506,7 @@ void NCanvas::NDraw::OutlinedCuboid(UU::CVec3f position, UU::CVec3f size)
 	glEnd();
 }
 
-void NCanvas::NDraw::Line(UU::CVec3f position1, UU::CVec3f position2)
+void NCanvas::Draw::Line(UU::CVec3f position1, UU::CVec3f position2)
 {
 	glLineWidth(1.f);
 	
@@ -506,7 +518,7 @@ void NCanvas::NDraw::Line(UU::CVec3f position1, UU::CVec3f position2)
 	glEnd();
 }
 
-void NCanvas::NDraw::OutlinedLine(UU::CVec3f position1, UU::CVec3f position2)
+void NCanvas::Draw::OutlinedLine(UU::CVec3f position1, UU::CVec3f position2)
 {
 	glLineWidth(3.f);
 	glColor4ub(0, 0, 0, GetColour().a);
@@ -607,12 +619,14 @@ FT_Face NCanvas::NText::GetFontFace(std::string font)
 
 NCanvas::NText::CCharacter& NCanvas::NText::GetCharacter(FT_Face face, uint_t size, char32_t c)
 {
+	uint_t design_size = static_cast<uint_t>(size * GetDPI() / 72.f);
+	
 	if (characters.contains(std::tuple(face, size, c)))
 	{
 		return characters[std::tuple(face, size, c)];
 	}
 
-	FT_Set_Pixel_Sizes(face, 0, size);
+	FT_Set_Pixel_Sizes(face, 0, design_size);
 
 	glPixelStorei(GL_UNPACK_ALIGNMENT, 1);
 	
@@ -663,14 +677,17 @@ UU::CVec2l NCanvas::NText::MeasureString(std::string text, std::string font, uin
 		CCharacter ch = GetCharacter(current_font_face, size, c);
 
 		result[0] += ch.advance / 64;
-		result[1] = UU::Max(ch.size[1], static_cast<uint_t>(result[1]));
 	}
+
+	result[1] = static_cast<long>(size);
 	
 	return result;
 }
 
 void NCanvas::NText::PreloadFont(std::string font, uint_t size)
 {
+	size = static_cast<uint_t>(size * GetDPI() / 72.f);
+	
 	FT_Face current_font_face = GetFontFace(font);
 
 	FT_Set_Pixel_Sizes(current_font_face, 0, size);

@@ -31,19 +31,21 @@ namespace NCanvas
 	void Begin3D();
 	void End3D();
 
-	// Colour
-	void SetColour(UU::CColour colour);
-	UU::CColour& GetColour();
+	float GetDPI();
 
-	namespace NDraw
+	namespace Draw
 	{
+		// Colour
+		void SetColour(UU::CColour colour);
+		UU::CColour& GetColour();
+		
 		//2D
 
-		void Rect(UU::CVec2f position, UU::CVec2f size);
+		void FilledRect(UU::CVec2f position, UU::CVec2f size);
 		void OutlinedRect(UU::CVec2f position, UU::CVec2f size);
-		void Circle(UU::CVec2f position, float radius);
+		void FilledCircle(UU::CVec2f position, float radius);
 		void OutlinedCircle(UU::CVec2f position, float radius);
-		void Poly(size_t num_points, UU::CVec2f *  positions);
+		void FilledPoly(size_t num_points, UU::CVec2f *  positions);
 		void OutlinedPoly(size_t num_points, UU::CVec2f *  positions);
 		void Line(UU::CVec2f position1, UU::CVec2f position2);
 		void OutlinedLine(UU::CVec2f position1, UU::CVec2f position2);
@@ -51,7 +53,7 @@ namespace NCanvas
 
 		// 3D
 
-		void Cuboid(UU::CVec3f position, UU::CVec3f size);
+		void FilledCuboid(UU::CVec3f position, UU::CVec3f size);
 		void OutlinedCuboid(UU::CVec3f position, UU::CVec3f size);
 		
 		void Line(UU::CVec3f position1, UU::CVec3f position2);

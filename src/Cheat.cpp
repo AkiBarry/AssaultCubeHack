@@ -58,21 +58,21 @@ void NCheat::Aimbot()
 
 void NCheat::ESP()
 {
-	/*NCanvas::Begin2D();
+	NCanvas::Begin2D();
 	UU::CVec2f mid = NGlobals::GameResolution() / 2.f - UU::CVec2f(0.5f, 0.5f);
 
-	NCanvas::SetColour(UU::CColour::White);
-	NCanvas::NDraw::Rect(mid - UU::CVec2f(100.f, 10.f), UU::CVec2f(200.f, 20.f));
-	
-	UU::CVec2l res = NCanvas::NText::MeasureString("Centered Text Test wgwpww", "symbola.ttf", 16);
+	UU::CVec2l res = NCanvas::NText::MeasureString("Centered Text Test Mgwpww", "symbola.ttf", 16);
 
-	NCanvas::SetColour(UU::CColour::Blue);
-	NCanvas::NDraw::Text("Centered Text Test wgwpww", mid - UU::CVec2f(res[0] / 2.f, -res[1] / 2.f), "symbola.ttf", 16);
-	NCanvas::SetColour(UU::CColour::Black);
-	NCanvas::NDraw::Text("Centered Text Test wgwpww", mid - UU::CVec2f(res[0] / 2.f, 0.f), "symbola.ttf", 16);
+	NCanvas::Draw::SetColour(UU::CColour::White);
+	NCanvas::Draw::FilledRect(mid - res / 2.f, res);
+	
+	
+
+	NCanvas::Draw::SetColour(UU::CColour::Blue);
+	NCanvas::Draw::Text("Centered Text Test Mgwpww", mid - UU::CVec2f(res[0] / 2.f, -res[1] / 2.f), "symbola.ttf", 16);
 
 	NConsole::Println(res);
-	NCanvas::End2D();*/
+	NCanvas::End2D();
 	
 	if (NVars::esp_enabled)
 	{
@@ -134,31 +134,31 @@ void NCheat::ESP()
 						
 						NCanvas::Begin2D();
 						{
-							NCanvas::SetColour(ent_colour.WithAlpha(50));
-							NCanvas::NDraw::Rect(min_2d, size_2d);
+							NCanvas::Draw::SetColour(ent_colour.WithAlpha(50));
+							NCanvas::Draw::FilledRect(min_2d, size_2d);
 							
-							NCanvas::SetColour(ent_colour);
-							NCanvas::NDraw::OutlinedRect(min_2d, size_2d);
+							NCanvas::Draw::SetColour(ent_colour);
+							NCanvas::Draw::OutlinedRect(min_2d, size_2d);
 
-							NCanvas::SetColour(UU::CColour::Black);
-							NCanvas::NDraw::OutlinedRect(min_2d + UU::CVec2f(-7.f, 0.f), UU::CVec2f(5.f, size_2d[1]));
+							NCanvas::Draw::SetColour(UU::CColour::Black);
+							NCanvas::Draw::OutlinedRect(min_2d + UU::CVec2f(-7.f, 0.f), UU::CVec2f(5.f, size_2d[1]));
 
-							NCanvas::SetColour(UU::CColour(40, 120, 250));
-							NCanvas::NDraw::OutlinedRect(min_2d + UU::CVec2f(-6.f, 1.f), UU::CVec2f(3.f, size_2d[1] - 2.f));
+							NCanvas::Draw::SetColour(UU::CColour(40, 120, 250));
+							NCanvas::Draw::OutlinedRect(min_2d + UU::CVec2f(-6.f, 1.f), UU::CVec2f(3.f, size_2d[1] - 2.f));
 
-							NCanvas::SetColour(UU::CColour::Black);
-							NCanvas::NDraw::Line(min_2d + UU::CVec2f(-5.f, 2.f), min_2d + UU::CVec2f(-5.f, size_2d[1] - 4.f));
+							NCanvas::Draw::SetColour(UU::CColour::Black);
+							NCanvas::Draw::Line(min_2d + UU::CVec2f(-5.f, 2.f), min_2d + UU::CVec2f(-5.f, size_2d[1] - 4.f));
 
-							NCanvas::SetColour(UU::CHSB(current_entity.health / 300.f, 1.f, 1.f).ToColour());
-							NCanvas::NDraw::Rect(min_2d + UU::CVec2f(-6.f,
+							NCanvas::Draw::SetColour(UU::CHSB(current_entity.health / 300.f, 1.f, 1.f).ToColour());
+							NCanvas::Draw::FilledRect(min_2d + UU::CVec2f(-6.f,
 								1.f + (100.f - current_entity.health) / 100.f * (size_2d[1] - 2.f)), UU::CVec2f(3.f, current_entity.health / 100.f * (size_2d[1] - 2.f)));
 
 							UU::CVec2f pos_2d;
 
 							NMisc::WorldToScreen(current_entity.position, pos_2d);
 
-							NCanvas::SetColour(UU::CColour::White);
-							NCanvas::NDraw::OutlinedLine(NGlobals::GameResolution() / 2.f, pos_2d);
+							NCanvas::Draw::SetColour(UU::CColour::White);
+							NCanvas::Draw::OutlinedLine(NGlobals::GameResolution() / 2.f, pos_2d);
 						}
 						NCanvas::End2D();
 
@@ -168,12 +168,12 @@ void NCheat::ESP()
 					{
 						NCanvas::Begin3D();
 						{
-							NCanvas::SetColour(ent_colour.WithAlpha(50));
-							NCanvas::NDraw::Cuboid(NGlobals::GetEntityList()[i]->position, UU::CVec3f(current_entity.radius * 2.f,
+							NCanvas::Draw::SetColour(ent_colour.WithAlpha(50));
+							NCanvas::Draw::FilledCuboid(NGlobals::GetEntityList()[i]->position, UU::CVec3f(current_entity.radius * 2.f,
 								current_entity.radius * 2.f, current_entity.height));
 
-							NCanvas::SetColour(ent_colour);
-							NCanvas::NDraw::OutlinedCuboid(NGlobals::GetEntityList()[i]->position, UU::CVec3f(current_entity.radius * 2.f,
+							NCanvas::Draw::SetColour(ent_colour);
+							NCanvas::Draw::OutlinedCuboid(NGlobals::GetEntityList()[i]->position, UU::CVec3f(current_entity.radius * 2.f,
 								current_entity.radius * 2.f, current_entity.height));
 						}
 						NCanvas::End3D();
@@ -210,11 +210,11 @@ void NCheat::ESP()
 				temp + UU::CVec2f(0.f, 20.f)
 			};
 
-			NCanvas::SetColour(UU::CColour::White);
-			NCanvas::NDraw::Poly(3, cursor_arr);
+			NCanvas::Draw::SetColour(UU::CColour::White);
+			NCanvas::Draw::FilledPoly(3, cursor_arr);
 
-			NCanvas::SetColour(UU::CColour::Black);
-			NCanvas::NDraw::OutlinedPoly(3, cursor_arr);
+			NCanvas::Draw::SetColour(UU::CColour::Black);
+			NCanvas::Draw::OutlinedPoly(3, cursor_arr);
 		}
 
 	}
@@ -434,10 +434,10 @@ bool NCheat::Initiate()
 
 		if (NVars::radar_circular)
 		{
-			NCanvas::SetColour(UU::CColour::Black);
-			NCanvas::NDraw::OutlinedCircle(radar_abs_pos + radar_size_div_two, 100.f);
-			NCanvas::SetColour(UU::CColour::White);
-			NCanvas::NDraw::Circle(radar_abs_pos + radar_size_div_two, 99.f);
+			NCanvas::Draw::SetColour(UU::CColour::Black);
+			NCanvas::Draw::OutlinedCircle(radar_abs_pos + radar_size_div_two, 100.f);
+			NCanvas::Draw::SetColour(UU::CColour::White);
+			NCanvas::Draw::FilledCircle(radar_abs_pos + radar_size_div_two, 99.f);
 		}
 		else
 		{
@@ -468,15 +468,15 @@ bool NCheat::Initiate()
 
 		// FOV Lines
 
-		NCanvas::SetColour(UU::CColour::Black);
+		NCanvas::Draw::SetColour(UU::CColour::Black);
 
-		NCanvas::NDraw::Line(
+		NCanvas::Draw::Line(
 			radar_abs_pos + NMenuItems::radar_window->window_frame->GetSize() / 2.f,
 			radar_abs_pos + NMenuItems::radar_window->window_frame->GetSize() / 2.f + UU::CVec2f(UU::Sin(pos_angle),
 				-UU::Cos(pos_angle)) * 100.f * pos_fov_line_scaler
 		);
 
-		NCanvas::NDraw::Line(
+		NCanvas::Draw::Line(
 			radar_abs_pos + radar_size_div_two,
 			radar_abs_pos + radar_size_div_two + UU::CVec2f(UU::Sin(neg_angle),
 				-UU::Cos(neg_angle)) * 100.f * neg_fov_line_scaler
@@ -532,10 +532,10 @@ bool NCheat::Initiate()
 					relative_pos.RotateInPlace(UU::CAngle<float, 1>(-angle));
 				}
 
-				NCanvas::SetColour(UU::CColour::Black);
-				NCanvas::NDraw::OutlinedRect(NMenuItems::radar_window->window_frame->GetAbsPosition() + (NMenuItems::radar_window->GetSize() / 2.f) + relative_pos - UU::CVec2f(5.f, 5.f), UU::CVec2f(10.f, 10.f));
-				NCanvas::SetColour(UU::CColour(200, 200, 200));
-				NCanvas::NDraw::Rect(NMenuItems::radar_window->window_frame->GetAbsPosition() + (NMenuItems::radar_window->GetSize() / 2.f) + relative_pos - UU::CVec2f(4.f, 4.f), UU::CVec2f(8.f, 8.f));
+				NCanvas::Draw::SetColour(UU::CColour::Black);
+				NCanvas::Draw::OutlinedRect(NMenuItems::radar_window->window_frame->GetAbsPosition() + (NMenuItems::radar_window->GetSize() / 2.f) + relative_pos - UU::CVec2f(5.f, 5.f), UU::CVec2f(10.f, 10.f));
+				NCanvas::Draw::SetColour(UU::CColour(200, 200, 200));
+				NCanvas::Draw::FilledRect(NMenuItems::radar_window->window_frame->GetAbsPosition() + (NMenuItems::radar_window->GetSize() / 2.f) + relative_pos - UU::CVec2f(4.f, 4.f), UU::CVec2f(8.f, 8.f));
 			}
 		}
 	};
