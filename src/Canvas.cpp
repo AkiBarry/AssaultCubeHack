@@ -330,8 +330,8 @@ void NCanvas::Draw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2)
 
 void NCanvas::Draw::Text(std::string text, UU::CVec2f position, std::string font, uint_t size)
 {
-	position[0] = UU::Round(position[0]);
-	position[1] = UU::Round(position[1]);
+	position[0] = UU::Floor(position[0]);
+	position[1] = UU::Floor(position[1]);
 
 	UU::CColour colour = GetColour();
 	
