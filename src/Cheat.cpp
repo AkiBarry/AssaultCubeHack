@@ -61,13 +61,15 @@ void NCheat::ESP()
 	NCanvas::Begin2D();
 	UU::CVec2f mid = NGlobals::GameResolution() / 2.f - UU::CVec2f(0.5f, 0.5f);
 
-	UU::CVec2l res = NCanvas::NText::MeasureString("Center Text Test Mgwpww", "symbola.ttf", 16);
+	std::string text = "If this fits in da box correctly good job";
+
+	UU::CVec2l res = NCanvas::NText::MeasureString(text, "symbola.ttf", 16);
 
 	NCanvas::Draw::SetColour(UU::CColour::White);
 	NCanvas::Draw::FilledRect(mid - res / 2.f, res);
 
 	NCanvas::Draw::SetColour(UU::CColour::Blue);
-	NCanvas::Draw::Text("Center Text Test Mgwpww", mid - UU::CVec2f(res[0] / 2.f, -res[1] / 2.f), "symbola.ttf", 16);
+	NCanvas::Draw::Text(text, mid - UU::CVec2f(res[0] / 2.f, -res[1] / 2.f), "symbola.ttf", 16);
 	
 	NCanvas::End2D();
 	
