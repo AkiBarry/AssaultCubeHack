@@ -68,6 +68,8 @@ void NCheat::ESP()
 	NCanvas::Draw::SetColour(UU::CColour::White);
 	NCanvas::Draw::FilledRect(mid - res / 2.f, res);
 
+	NCanvas::Draw::QuadraticBezierCurve(UU::CVec2f(0, 0), UU::CVec2f(0, 100), UU::CVec2f(100, 100));
+
 	NCanvas::Draw::SetColour(UU::CColour::Blue);
 	NCanvas::Draw::Text(text, mid - UU::CVec2f(res[0] / 2.f, -res[1] / 2.f), "symbola.ttf", 16);
 	

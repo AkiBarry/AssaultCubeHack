@@ -304,6 +304,31 @@ void NCanvas::Draw::Line(UU::CVec2f position1, UU::CVec2f position2)
 	glEnd();
 }
 
+void NCanvas::Draw::QuadraticBezierCurve(UU::CVec2f position1, UU::CVec2f position2, UU::CVec2f position3)
+{
+	float dist = (position3 - position1).Length();
+
+	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	glEnable(GL_LINE_SMOOTH);
+
+	auto bezier_function = [=](float t)->UU::CVec2f
+	{
+		return (position1 * (1.f - t) + position2 * t) * (1.f - t) + (position2 * (1 - t) + position3 * t) * t;
+	};
+
+	glBegin(GL_LINES);
+
+	for(float f = 0.f; f <= dist; f += 1.f)
+	{
+		UU::CVec2f temp = bezier_function(f / dist);
+		glVertex2f(temp[0], temp[1]);
+	}
+
+	glEnd();
+
+	glPopAttrib();
+}
+
 void NCanvas::Draw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2)
 {
 	glLineWidth(3.f);
