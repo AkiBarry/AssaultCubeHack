@@ -7,12 +7,7 @@
 #include "Menu.hpp"
 
 void NCheat::Aimbot()
-{
-	/*for (int i = 0; i < 16; ++i)
-	{
-		NGlobals::LocalPlayer().name[i] = (NGlobals::LocalPlayer().name[i] + 1) % 128;
-	}*/
-	
+{	
 	if (!NVars::aimbot_enabled)
 		return;
 
@@ -61,17 +56,21 @@ void NCheat::ESP()
 	NCanvas::Begin2D();
 	UU::CVec2f mid = NGlobals::GameResolution() / 2.f - UU::CVec2f(0.5f, 0.5f);
 
-	std::string text = "If this fits in da box correctly good job";
+	//std::string text = "If this fits in da box correctly good job";
 
-	UU::CVec2l res = NCanvas::NText::MeasureString(text, "symbola.ttf", 16);
+	//UU::CVec2l res = NCanvas::NText::MeasureString(text, "symbola.ttf", 16);
 
 	NCanvas::Draw::SetColour(UU::CColour::White);
-	NCanvas::Draw::FilledRect(mid - res / 2.f, res);
+	//NCanvas::Draw::FilledRect(mid - res / 2.f, res);
+	NCanvas::Draw::FilledRect(UU::CVec2f(0, 0), UU::CVec2f(100, 100));
 
+	NCanvas::Draw::SetColour(UU::CColour::Black);
+
+	NCanvas::Draw::Line(UU::CVec2f(0, 0), UU::CVec2f(100, 100));
 	NCanvas::Draw::QuadraticBezierCurve(UU::CVec2f(0, 0), UU::CVec2f(0, 100), UU::CVec2f(100, 100));
 
 	NCanvas::Draw::SetColour(UU::CColour::Blue);
-	NCanvas::Draw::Text(text, mid - UU::CVec2f(res[0] / 2.f, -res[1] / 2.f), "symbola.ttf", 16);
+	//NCanvas::Draw::Text(text, mid - UU::CVec2f(res[0] / 2.f, -res[1] / 2.f), "symbola.ttf", 16);
 	
 	NCanvas::End2D();
 	
@@ -533,10 +532,14 @@ bool NCheat::Initiate()
 					relative_pos.RotateInPlace(UU::CAngle<float, 1>(-angle));
 				}
 
+				UU::CVec2f entity_left_corner = NMenuItems::radar_window->window_frame->GetAbsPosition() + (NMenuItems::radar_window->GetSize() / 2.f) + relative_pos;
+				entity_left_corner[0] = UU::Round(entity_left_corner[0]);
+				entity_left_corner[1] = UU::Round(entity_left_corner[1]);
+
 				NCanvas::Draw::SetColour(UU::CColour::Black);
-				NCanvas::Draw::OutlinedRect(NMenuItems::radar_window->window_frame->GetAbsPosition() + (NMenuItems::radar_window->GetSize() / 2.f) + relative_pos - UU::CVec2f(5.f, 5.f), UU::CVec2f(10.f, 10.f));
+				NCanvas::Draw::OutlinedRect(entity_left_corner - UU::CVec2f(5.f, 5.f), UU::CVec2f(10.f, 10.f));
 				NCanvas::Draw::SetColour(UU::CColour(200, 200, 200));
-				NCanvas::Draw::FilledRect(NMenuItems::radar_window->window_frame->GetAbsPosition() + (NMenuItems::radar_window->GetSize() / 2.f) + relative_pos - UU::CVec2f(4.f, 4.f), UU::CVec2f(8.f, 8.f));
+				NCanvas::Draw::FilledRect(entity_left_corner - UU::CVec2f(4.f, 4.f), UU::CVec2f(8.f, 8.f));
 			}
 		}
 	};

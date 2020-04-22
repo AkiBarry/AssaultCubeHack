@@ -48,6 +48,7 @@ namespace NCanvas
 		void FilledPoly(size_t num_points, UU::CVec2f *  positions);
 		void OutlinedPoly(size_t num_points, UU::CVec2f *  positions);
 		void Line(UU::CVec2f position1, UU::CVec2f position2);
+		void PolyLine(size_t num_points, UU::CVec2f* positions);
 		void QuadraticBezierCurve(UU::CVec2f position1, UU::CVec2f position2, UU::CVec2f position3);
 		void OutlinedLine(UU::CVec2f position1, UU::CVec2f position2);
 		void Text(std::string text, UU::CVec2f position, std::string font, uint_t size);

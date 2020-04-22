@@ -304,12 +304,24 @@ void NCanvas::Draw::Line(UU::CVec2f position1, UU::CVec2f position2)
 	glEnd();
 }
 
+void NCanvas::Draw::PolyLine(size_t num_points, UU::CVec2f * positions)
+{
+	glBegin(GL_LINES);
+	{
+		for (size_t i = 0; i < num_points; ++i)
+			glVertex2f(positions[i][0], positions[i][1]);
+	}
+	glEnd();
+}
+
 void NCanvas::Draw::QuadraticBezierCurve(UU::CVec2f position1, UU::CVec2f position2, UU::CVec2f position3)
 {
-	float dist = (position3 - position1).Length();
+	float dist = (position2 - position1).Length() + (position3 - position2).Length();
 
-	glPushAttrib(GL_ALL_ATTRIB_BITS);
+	/*
+	glPushAttrib(GL_ENABLE_BIT);
 	glEnable(GL_LINE_SMOOTH);
+	*/
 
 	auto bezier_function = [=](float t)->UU::CVec2f
 	{
@@ -318,15 +330,24 @@ void NCanvas::Draw::QuadraticBezierCurve(UU::CVec2f position1, UU::CVec2f positi
 
 	glBegin(GL_LINES);
 
-	for(float f = 0.f; f <= dist; f += 1.f)
+	UU::CVec2f temp = bezier_function(0.f);
+
+	glVertex2f(temp[0], temp[1]);
+
+	for(float f = 1.f; f <= dist; f += 1.f)
 	{
 		UU::CVec2f temp = bezier_function(f / dist);
 		glVertex2f(temp[0], temp[1]);
+		glVertex2f(temp[0], temp[1]);
 	}
+
+	temp = bezier_function(1.f);
+
+	glVertex2f(temp[0], temp[1]);
 
 	glEnd();
 
-	glPopAttrib();
+	//glPopAttrib();
 }
 
 void NCanvas::Draw::OutlinedLine(UU::CVec2f position1, UU::CVec2f position2)
